@@ -10,9 +10,7 @@ class WordFinder(var board: Board, var dictionary: Dictionary) {
 
         for (row in 0 until board.size()) {
             for (col in 0 until board.size()) {
-                val visited = Array(board.size()) { Array(board.size()) { false} }
-                val s = StringBuilder()
-                recursiveFind(words, visited, row, col, s)
+                recursiveFind(words, 0, board.size(), row, col, StringBuilder())
             }
         }
 
@@ -20,11 +18,13 @@ class WordFinder(var board: Board, var dictionary: Dictionary) {
     }
 
     private fun recursiveFind (words: TreeSet<String>,
-                               visited: Array<Array<Boolean>>,
+                               visited: Long,
+                               size: Int,
                                row: Int,
                                col: Int,
-                               s: StringBuilder) {
-        visited[row][col] = true
+                               s: StringBuilder) : Long {
+        val currentBit = 1L shl (row * size) + col
+        var hasVisited = visited or currentBit
         s.append(board.at(row, col))
 
         val word = s.toString()
@@ -41,13 +41,15 @@ class WordFinder(var board: Board, var dictionary: Dictionary) {
                     continue
                 }
 
-                if (!visited[i][j]) {
-                    recursiveFind(words, visited, i, j, s)
+                val bit = 1L shl (i * size) + j;
+                if (hasVisited and bit == 0L) {
+                    hasVisited = recursiveFind(words, hasVisited, size, i, j, s)
                 }
             }
         }
 
         s.deleteCharAt(s.length - 1)
-        visited[row][col] = false
+
+        return hasVisited and currentBit.inv()
     }
 }
