@@ -2,11 +2,10 @@
     <!-- The class name to the ScrollingChildBehavior required for AppBarLayout -->
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
 
-    <string name="app_name">My Application</string>
+    <string name="app_name">Braggle</string>
 
-    <string name="dummy_button">Dummy Button</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_all_words">AllWordsActivity</string>
+    <string name="title_activity_main">Braggle Board</string>
+    <string name="title_activity_all_words">All Words</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -98,4 +97,6 @@
     </string>
     <string name="action_settings">Settings</string>
     <string name="element_text">%s</string>
+    <string name="found_words"><strong>Found %d/%d:</strong> %s</string>
+    <string name="loading_new_game"><strong>Searching all words...</strong></string>
 </resources>

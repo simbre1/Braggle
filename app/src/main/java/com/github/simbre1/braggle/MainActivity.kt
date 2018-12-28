@@ -7,11 +7,12 @@ import android.support.v7.app.AppCompatActivity
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import java.util.*
 import java.util.function.Consumer
 
 const val ALL_WORDS = "com.github.simbre1.braggle.ALL_WORDS"
-const val FOUND_WORDS = "com.github.simbre1.braggle.FOUND_WORDS"
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,16 +27,20 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action") { showAllWords() }
+            Snackbar.make(view, "Show all words", Snackbar.LENGTH_LONG)
+                    .setAction("Next") { showAllWords() }
                     .show()
+        }
+
+        newGameButton.setOnClickListener { view ->
+            newGame()
         }
 
         defaultDict = Dictionary(
                 applicationContext.assets.open("eowl-v1.1.2.txt")
                         .bufferedReader()
                         .readLines()
-                        .filter { s -> s != null && s.length >= minWordLength }
+                        .filter { s -> s.length >= minWordLength }
                         .map { s -> s.toUpperCase() }
                         .toCollection(TreeSet()))
 
@@ -59,21 +64,31 @@ class MainActivity : AppCompatActivity() {
 
         if (currentGame.isWord(word)) {
             currentGame.addWord(word)
-
-            val words = currentGame.foundWords.toString()
-            val foundN = currentGame.foundWords.size
-            val allN = currentGame.allWords.size
-            wordView.text =  "Found $foundN/$allN: $words"
+            updateFoundString(currentGame)
         }
+    }
+
+    private fun updateFoundString(game: Game) {
+        val words = game.foundWords.toString()
+        val foundN = game.foundWords.size
+        val allN = game.allWords.size
+        wordView.text = getString(R.string.found_words, foundN, allN, words)
     }
 
     private fun newGame() {
         val currentDict = defaultDict ?: return
 
         val board = Board.random(4)
-        val allWords = WordFinder(board, currentDict).find()
-        game = Game(board, allWords)
-
         boardView.setBoard(board)
+
+        wordView.text = getString(R.string.loading_new_game)
+
+        doAsync {
+            val newGame = Game(board, WordFinder(board, currentDict).find())
+            uiThread {
+                game = newGame
+                updateFoundString(newGame)
+            }
+        }
     }
 }
