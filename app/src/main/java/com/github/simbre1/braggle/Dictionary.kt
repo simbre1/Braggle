@@ -1,7 +1,5 @@
 package com.github.simbre1.braggle
 
-import android.app.SearchManager
-import android.content.Intent
 import java.util.*
 
 class Dictionary(private val words: TreeSet<String>,
