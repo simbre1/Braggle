@@ -1,7 +1,10 @@
 package com.github.simbre1.braggle
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -65,7 +68,15 @@ class MainActivity : AppCompatActivity() {
         val currentGame = game ?: return
 
         if (currentGame.isWord(word)) {
-            currentGame.addWord(word)
+            if (currentGame.addWord(word)) {
+                val vibratorService = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
+                if (vibratorService != null && vibratorService.hasVibrator()) {
+                    vibratorService.vibrate(
+                        VibrationEffect.createOneShot(
+                            200,
+                            VibrationEffect.DEFAULT_AMPLITUDE))
+                }
+            }
             updateFoundString(currentGame)
         }
     }

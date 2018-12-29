@@ -6,12 +6,12 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 import java.util.function.Consumer
 import kotlin.math.floor
 import kotlin.math.min
-import android.util.TypedValue
 
 fun getColor(context: Context?, colorId: Int) : Int? {
     val typedValue = TypedValue()
@@ -36,8 +36,9 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
     private val charHitStyle = Paint()
 
     init {
-        val strokeColor = getColor(context, R.attr.colorButtonNormal) ?: Color.GREEN
-        val strokeColorHit = getColor(context, R.attr.colorControlActivated) ?: Color.CYAN
+        val strokeColor = getColor(context, R.attr.colorPrimary) ?: Color.BLACK
+        val bgColor = Color.WHITE
+        val strokeColorHit = getColor(context, R.attr.colorAccent) ?: Color.RED
 
         circleStroke.color = strokeColor
 
@@ -45,7 +46,7 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
         circleStrokeHit.color = strokeColorHit
 
         circleStrokeHit.isAntiAlias = true
-        circleBg.color = Color.WHITE
+        circleBg.color = bgColor
         charStyle.color = strokeColor
         charHitStyle.color = strokeColorHit
     }

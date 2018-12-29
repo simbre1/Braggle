@@ -41,9 +41,9 @@ class AllWordsAdapter(private val myDataset: List<Pair<String, Boolean>>,
         val word = myDataset[position].first
         holder.textView.text = word
         if (myDataset[position].second) {
-            holder.textView.setTextColor(getColor(holder.view.context, R.attr.colorControlActivated) ?: Color.CYAN)
+            holder.textView.setTextColor(getColor(holder.view.context, R.attr.colorAccent) ?: Color.CYAN)
         } else {
-            holder.textView.setTextColor(getColor(holder.view.context, R.attr.colorButtonNormal) ?: Color.GREEN)
+            holder.textView.setTextColor(Color.DKGRAY)
         }
 
         if (dictionaryLookupIntentPackage != null) {
@@ -51,7 +51,10 @@ class AllWordsAdapter(private val myDataset: List<Pair<String, Boolean>>,
                 val intent = Intent(Intent.ACTION_SEARCH)
                 intent.setPackage(dictionaryLookupIntentPackage)
                 intent.putExtra(SearchManager.QUERY, word)
-                holder.view.context.startActivity(intent)
+                try {
+                    holder.view.context.startActivity(intent)
+                } catch (ignored: Exception) {
+                }
             }
         }
     }
