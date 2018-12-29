@@ -15,10 +15,12 @@ class AllWordsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_all_words)
 
+        @Suppress("UNCHECKED_CAST")
         val allWords : Array<Pair<String, Boolean>> = intent?.extras?.get(ALL_WORDS) as Array<Pair<String, Boolean>>
+        val dictionaryLookupIntentPackage = intent?.extras?.getString(DICTIONARY_LOOKUP_INTENT_PACKAGE)
 
         viewManager = LinearLayoutManager(this)
-        viewAdapter = AllWordsAdapter(allWords.toList())
+        viewAdapter = AllWordsAdapter(allWords.toList(), dictionaryLookupIntentPackage)
 
         recyclerView = findViewById<RecyclerView>(R.id.allWordsView).apply {
             // use this setting to improve performance if you know that changes

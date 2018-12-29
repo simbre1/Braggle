@@ -1,8 +1,11 @@
 package com.github.simbre1.braggle
 
+import android.app.SearchManager
+import android.content.Intent
 import java.util.*
 
-class Dictionary(private var words: TreeSet<String>) {
+class Dictionary(private val words: TreeSet<String>,
+                 val lookupIntentPackage: String?) {
 
     fun isWord(s: String): Boolean {
         return words.contains(s)
@@ -13,7 +16,7 @@ class Dictionary(private var words: TreeSet<String>) {
     /**
      * String is a prefix for a larger word in this dictionary.
      */
-    fun isPrefix(s: String) : Boolean = Companion.isPrefix(words, s)
+    fun isPrefix(s: String) : Boolean = isPrefix(words, s)
 
     companion object {
         /**
@@ -28,7 +31,7 @@ class Dictionary(private var words: TreeSet<String>) {
             val i = tailSet.iterator()
             val tailWord = i.next()
             if (tailWord != s) {
-                return tailWord.startsWith(s);
+                return tailWord.startsWith(s)
             }
 
             return i.hasNext() && i.next().startsWith(s)

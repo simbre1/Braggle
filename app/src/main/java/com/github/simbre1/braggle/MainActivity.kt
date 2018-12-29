@@ -14,11 +14,12 @@ import java.util.*
 import java.util.function.Consumer
 
 const val ALL_WORDS = "com.github.simbre1.braggle.ALL_WORDS"
+const val DICTIONARY_LOOKUP_INTENT_PACKAGE = "com.github.simbre1.braggle.DICTIONARY_LOOKUP_INTENT_PACKAGE"
 
 class MainActivity : AppCompatActivity() {
 
     private val minWordLength = 3
-    private var defaultDict : Dictionary? = null
+    private var defaultDictEnglish : Dictionary? = null
     private var game: Game? = null
 
 
@@ -33,19 +34,18 @@ class MainActivity : AppCompatActivity() {
                     .show()
         }
 
-        newGameButton.setOnClickListener { view ->
-            newGame()
-        }
+        newGameButton.setOnClickListener { newGame() }
 
-        defaultDict = Dictionary(
+        defaultDictEnglish = Dictionary(
                 applicationContext.assets.open("eowl-v1.1.2.txt")
                         .bufferedReader()
                         .readLines()
                         .filter { s -> s.length >= minWordLength }
                         .map { s -> s.toUpperCase() }
-                        .toCollection(TreeSet()))
+                        .toCollection(TreeSet()),
+            "livio.pack.lang.en_US")
 
-        boardView.wordListeners.add(Consumer<String>{ word -> onWord(word) })
+        boardView.wordListeners.add(Consumer { word -> onWord(word) })
 
         newGame()
     }
@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity() {
 
         val intent = Intent(this, AllWordsActivity::class.java).apply {
             putExtra(ALL_WORDS, list.toTypedArray())
+            putExtra(DICTIONARY_LOOKUP_INTENT_PACKAGE, currentGame.dictionary.lookupIntentPackage)
         }
         startActivity(intent)
     }
@@ -77,7 +78,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun newGame() {
-        val currentDict = defaultDict ?: return
+        val currentDict = defaultDictEnglish ?: return
 
         val board = Board.random(4)
         boardView.setBoard(board)
@@ -97,7 +98,7 @@ class MainActivity : AppCompatActivity() {
         private fun createNewGame(board: Board, dict: Dictionary) : Game {
             val startTime = System.nanoTime()
 
-            val game = Game(board, WordFinder(board, dict).find())
+            val game = Game(board, dict, WordFinder(board, dict).find())
 
             Log.d("createNewGame", "time:" + (System.nanoTime() - startTime))
 
