@@ -10,22 +10,28 @@ class GameModel(private val dictionaryRepo: DictionaryRepo) : ViewModel() {
     val game: MutableLiveData<Game> = MutableLiveData()
     val minWordLength = 4
 
-    fun createNewGameAsync() {
+    fun createNewGameAsync(dictionary: String,
+                           minWordLength: Int,
+                           boardSize: Int) {
         doAsync {
-            createNewGame()
+            createNewGame(dictionary, minWordLength, boardSize)
         }
     }
 
-    fun createNewGame() {
+    fun createNewGame(dictionary: String,
+                      minWordLength: Int,
+                      boardSize: Int) {
         val startTime = System.nanoTime()
 
-        val board = Board.random(4)
-        val dictionary = dictionaryRepo.getEnglish()
+        val board = Board.random(boardSize)
+        //TODO get dictionary from parameter
+        val dict = dictionaryRepo.getEnglish()
         val newGame = Game(
             board,
-            dictionary,
-            WordFinder(board, dictionary).find())
+            dict,
+            WordFinder(board, dict).find(minWordLength))
 
+        Log.d("createNewGame", "dict:" + dictionary + " minWordLength:" + minWordLength + " boardSize:" + boardSize)
         Log.d("createNewGame", "time:" + (System.nanoTime() - startTime))
 
         game.postValue(newGame)

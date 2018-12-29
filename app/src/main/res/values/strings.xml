@@ -1,6 +1,8 @@
 <resources>
     <!-- The class name to the ScrollingChildBehavior required for AppBarLayout -->
-    <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
+    <string name="appbar_scrolling_view_behavior" translatable="false">
+        android.support.design.widget.AppBarLayout$ScrollingViewBehavior
+    </string>
 
     <string name="app_name">Braggle</string>
 
@@ -99,6 +101,11 @@
     <string name="action_new_game">New</string>
     <string name="action_show_all_words">Show</string>
     <string name="element_text">%s</string>
-    <string name="found_words"><strong>Found %d/%d:</strong> %s</string>
-    <string name="loading_new_game"><strong>Searching all words...</strong></string>
+    <string name="found_words">
+        <strong>Found %d/%d:</strong>
+        %s
+    </string>
+    <string name="loading_new_game">
+        <strong>Searching all words...</strong>
+    </string>
 </resources>

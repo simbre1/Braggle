@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ListPreference
+            app:key="language_preference"
+            app:title="Language"
+            app:entries="@array/languages"
+            app:entryValues="@array/languageCodes"
+            app:defaultValue="en"
+            app:summary="%s"/>
+
+    <ListPreference
+            app:key="minimum_word_length_preference"
+            app:title="Minimum word length"
+            app:entries="@array/minimumWordLengths"
+            app:entryValues="@array/minimumWordLengths"
+            app:defaultValue="4"
+            app:summary="%s"/>
+
+    <ListPreference
+            app:key="board_size_preference"
+            app:title="Board size"
+            app:entries="@array/BoardSize"
+            app:entryValues="@array/boardSizeInt"
+            app:defaultValue="4"
+            app:summary="%s"/>
+</PreferenceScreen>

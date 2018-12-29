@@ -22,13 +22,13 @@ class DictionaryRepo(private val application: Application) {
             application.assets.open(asset)
                 .bufferedReader()
                 .readLines()
-                .filter { s -> s.length >= minWordLength }
+                .filter { s -> s.length >= minWordLengthLoad }
                 .map { s -> s.toUpperCase() }
                 .toCollection(TreeSet()),
             lookupIntentPackage)
     }
 
     companion object {
-        private const val minWordLength = 4
+        private const val minWordLengthLoad = 3
     }
 }

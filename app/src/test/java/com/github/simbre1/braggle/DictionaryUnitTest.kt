@@ -1,8 +1,6 @@
 package com.github.simbre1.braggle
 
 import org.junit.Test
-
-import org.junit.Assert.*
 import java.util.*
 
 /**
@@ -15,7 +13,8 @@ class DictionaryUnitTest {
     fun prefix_isCorrect() {
         val dict = Dictionary(
             TreeSet(
-                setOf("ab", "abc", "def")))
+                setOf("ab", "abc", "def")),
+            null)
 
         assert(dict.isPrefix("ab"))
         assert(!dict.isPrefix("abc"))

@@ -11,6 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import org.jetbrains.anko.defaultSharedPreferences
 import java.util.function.Consumer
 
 const val ALL_WORDS = "com.github.simbre1.braggle.ALL_WORDS"
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         if (gameModel.game.value == null) {
-            gameModel.createNewGame()
+            createNewGame()
         }
     }
 
@@ -54,16 +55,32 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
         R.id.action_new_game -> {
-            gameModel.createNewGame()
+            createNewGame()
             true
         }
         R.id.action_show_all_words -> {
             showAllWords()
             true
         }
+        R.id.action_settings -> {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+            true
+        }
         else -> {
             super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun createNewGame() {
+        val language = defaultSharedPreferences.getString("language_preference", "en")
+            ?: "en"
+        val minWordLength = defaultSharedPreferences.getString("minimum_word_length_preference", "4")?.toInt()
+            ?: 4
+        val boardSize = defaultSharedPreferences.getString("board_size_preference", "4")?.toInt()
+            ?: 4
+
+        gameModel.createNewGameAsync(language, minWordLength, boardSize)
     }
 
     private fun showAllWords() {

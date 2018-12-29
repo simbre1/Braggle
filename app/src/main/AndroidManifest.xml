@@ -3,6 +3,7 @@
           package="com.github.simbre1.braggle">
 
     <uses-permission android:name="android.permission.VIBRATE"/>
+
     <application
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
@@ -11,7 +12,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-                android:name="com.github.simbre1.braggle.MainActivity"
+                android:name=".MainActivity"
                 android:label="@string/title_activity_main"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -21,13 +22,15 @@
             </intent-filter>
         </activity>
         <activity
-                android:name="com.github.simbre1.braggle.AllWordsActivity"
+                android:name=".AllWordsActivity"
                 android:label="@string/title_activity_all_words"
-                android:parentActivityName="com.github.simbre1.braggle.MainActivity"
+                android:parentActivityName=".MainActivity"
                 android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="com.github.simbre1.braggle.MainActivity"/>
+        </activity>
+        <activity android:name=".SettingsActivity">
         </activity>
     </application>
 

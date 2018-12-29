@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="languages">
+        <item>Dutch *todo</item>
+        <item>English</item>
+        <item>French *todo</item>
+    </string-array>
+    <string-array name="languageCodes">
+        <item>en</item>
+        <item>fr</item>
+    </string-array>
+
+    <string-array name="minimumWordLengths">
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+
+    <string-array name="BoardSize">
+        <item>4x4</item>
+        <item>5x5</item>
+    </string-array>
+    <string-array name="boardSizeInt">
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+</resources>

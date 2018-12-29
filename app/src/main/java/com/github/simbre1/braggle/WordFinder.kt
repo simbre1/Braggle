@@ -1,17 +1,26 @@
 package com.github.simbre1.braggle
 
-import android.util.Log
 import java.util.*
 
 
 class WordFinder(var board: Board, var dictionary: Dictionary) {
 
-    fun find() : TreeSet<String> {
+    fun find() : TreeSet<String> = find(0)
+
+    fun find(minWordLength: Int) : TreeSet<String> {
         val words = TreeSet<String>()
 
         for (row in 0 until board.size()) {
             for (col in 0 until board.size()) {
-                recursiveFind(words, dictionary.getWords(), 0, board.size(), row, col, StringBuilder())
+                recursiveFind(
+                    words,
+                    dictionary.getWords(),
+                    0,
+                    board.size(),
+                    row,
+                    col,
+                    StringBuilder(),
+                    minWordLength)
             }
         }
 
@@ -24,7 +33,8 @@ class WordFinder(var board: Board, var dictionary: Dictionary) {
                                size: Int,
                                row: Int,
                                col: Int,
-                               s: StringBuilder) : Long {
+                               s: StringBuilder,
+                               minWordLength: Int) : Long {
         val currentBit = 1L shl (row * size) + col
         var hasVisited = visited or currentBit
         s.append(board.at(row, col))
@@ -35,7 +45,7 @@ class WordFinder(var board: Board, var dictionary: Dictionary) {
         if (!tailset.isEmpty()) {
             val iter = tailset.iterator()
             val tailWord = iter.next()
-            if (tailWord == word){
+            if (tailWord == word && tailWord.length >= minWordLength){
                 foundWords.add(word)
             }
 
@@ -53,7 +63,15 @@ class WordFinder(var board: Board, var dictionary: Dictionary) {
 
                         val bit = 1L shl (i * size) + j
                         if (hasVisited and bit == 0L) {
-                            hasVisited = recursiveFind(foundWords, tailset, hasVisited, size, i, j, s)
+                            hasVisited = recursiveFind(
+                                foundWords,
+                                tailset,
+                                hasVisited,
+                                size,
+                                i,
+                                j,
+                                s,
+                                minWordLength)
                         }
                     }
                 }
