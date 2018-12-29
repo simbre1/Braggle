@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -84,11 +85,23 @@ class MainActivity : AppCompatActivity() {
         wordView.text = getString(R.string.loading_new_game)
 
         doAsync {
-            val newGame = Game(board, WordFinder(board, currentDict).find())
+            val newGame = createNewGame(board, currentDict)
             uiThread {
                 game = newGame
                 updateFoundString(newGame)
             }
+        }
+    }
+
+    companion object {
+        private fun createNewGame(board: Board, dict: Dictionary) : Game {
+            val startTime = System.nanoTime()
+
+            val game = Game(board, WordFinder(board, dict).find())
+
+            Log.d("createNewGame", "time:" + (System.nanoTime() - startTime))
+
+            return game
         }
     }
 }
