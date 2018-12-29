@@ -6,8 +6,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import java.util.function.Consumer
@@ -17,26 +18,16 @@ const val DICTIONARY_LOOKUP_INTENT_PACKAGE = "com.github.simbre1.braggle.DICTION
 
 class MainActivity : AppCompatActivity() {
 
+    lateinit var gameModel: GameModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
         val factory = GameModelFactory(DictionaryRepo(application))
-        val gameModel = ViewModelProviders.of(this, factory).get(GameModel::class.java)
+        gameModel = ViewModelProviders.of(this, factory).get(GameModel::class.java)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Show all words", Snackbar.LENGTH_LONG)
-                    .setAction("Next") {
-                        val currentGame = gameModel.game.value
-                        if(currentGame != null) {
-                            showAllWords(currentGame)
-                        }
-                    }
-                    .show()
-        }
-
-        newGameButton.setOnClickListener { gameModel.createNewGame() }
         boardView.wordListeners.add(Consumer { word ->
             val currentGame = gameModel.game.value
             if(currentGame != null) {
@@ -56,7 +47,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showAllWords(game: Game) {
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+        R.id.action_new_game -> {
+            gameModel.createNewGame()
+            true
+        }
+        R.id.action_show_all_words -> {
+            showAllWords()
+            true
+        }
+        else -> {
+            super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun showAllWords() {
+        val game = gameModel.game.value ?: return
+
         val list = game.allWords.map { Pair(it, game.foundWords.contains(it)) }
 
         val intent = Intent(this, AllWordsActivity::class.java).apply {
