@@ -3,7 +3,7 @@ package com.github.simbre1.braggle
 import java.util.*
 
 class Dictionary(private val words: TreeSet<String>,
-                 val lookupIntentPackage: String?) {
+                 val language: Language) {
 
     fun isWord(s: String): Boolean {
         return words.contains(s)

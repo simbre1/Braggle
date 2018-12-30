@@ -7,13 +7,17 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:showIn="@layout/activity_main"
-        tools:context=".MainActivity" android:orientation="vertical">
+        tools:context=".MainActivity"
+        android:orientation="vertical">
 
     <com.github.simbre1.braggle.BoardView
             android:layout_width="match_parent"
-            android:layout_height="393dp" android:id="@+id/boardView"/>
+            android:layout_height="393dp"
+            android:id="@+id/boardView"/>
     <TextView
             android:text="@string/found_words"
             android:layout_width="match_parent"
-            android:layout_height="112dp" android:id="@+id/wordView"/>
+            android:layout_height="112dp"
+            android:id="@+id/wordView"
+            android:layout_margin="8dp"/>
 </LinearLayout>

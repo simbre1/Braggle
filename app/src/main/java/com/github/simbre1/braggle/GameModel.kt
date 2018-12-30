@@ -23,9 +23,10 @@ class GameModel(private val dictionaryRepo: DictionaryRepo) : ViewModel() {
                       boardSize: Int) {
         val startTime = System.nanoTime()
 
-        val board = Board.random(boardSize)
-        //TODO get dictionary from parameter
-        val dict = dictionaryRepo.getEnglish()
+        val language = Language.fromCode(dictionary) ?: Language.EN
+
+        val board = Board.random(language, boardSize)
+        val dict = dictionaryRepo.get(language)
         val newGame = Game(
             board,
             dict,

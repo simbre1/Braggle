@@ -12,16 +12,17 @@ class Board(private var letters: Array<Array<Char>>) {
 
     companion object Factory {
 
-        fun random(size: Int) : Board {
+        fun random(langauge: Language, size: Int) : Board {
             return random(
+                langauge,
                 size,
-                Random().nextLong(),
-                english16)
+                Random().nextLong())
         }
 
-        fun random(size: Int,
-                   seed: Long,
-                   dice: Array<String>): Board {
+        fun random(language: Language,
+                   size: Int,
+                   seed: Long): Board {
+            val dice = getDice(language, size)
             if (dice.isEmpty()) {
                 throw IllegalArgumentException("no dice")
             }
@@ -36,6 +37,13 @@ class Board(private var letters: Array<Array<Char>>) {
 
             return Board(letters)
         }
+
+        private fun getDice(language: Language, boardSize: Int): Array<String> =
+            when (language) {
+                Language.EN -> if (boardSize < 5) english16 else english25
+                Language.FR -> french16
+                Language.NL -> TODO()
+            }
 
         private val english16 = arrayOf(
             "AAEEGN",
@@ -55,49 +63,49 @@ class Board(private var letters: Array<Array<Char>>) {
             "HIMNUQ",
             "HLNNRZ")
 
-//        private val french16 = arrayOf(
-//            "ETUKNO",
-//            "EVGTIN",
-//            "DECAMP",
-//            "IELRUW",
-//            "EHIFSE",
-//            "RECALS",
-//            "ENTDOS",
-//            "OFXRIA",
-//            "NAVEDZ",
-//            "EIOATA",
-//            "GLENYU",
-//            "BMAQJO",
-//            "TLIBRA",
-//            "SPULTE",
-//            "AIMSOR",
-//            "ENHRIS")
-//
-//        private val english25 = arrayOf(
-//            "AAAFRS",
-//            "AAEEEE",
-//            "AAFIRS",
-//            "ADENNN",
-//            "AEEEEM",
-//            "AEEGMU",
-//            "AEGMNN",
-//            "AFIRSY",
-//            "BBJKXZ",
-//            "CCENST",
-//            "EIILST",
-//            "CEIPST",
-//            "DDHNOT",
-//            "DHHLOR",
-//            "DHHNOW",
-//            "DHLNOR",
-//            "EIIITT",
-//            "EILPST",
-//            "EMOTTT",
-//            "ENSSSU",
-//            "FIPRSY",
-//            "GORRVW",
-//            "IPRSYY",
-//            "NOOTUW",
-//            "OOOTTU")
+        private val french16 = arrayOf(
+            "ETUKNO",
+            "EVGTIN",
+            "DECAMP",
+            "IELRUW",
+            "EHIFSE",
+            "RECALS",
+            "ENTDOS",
+            "OFXRIA",
+            "NAVEDZ",
+            "EIOATA",
+            "GLENYU",
+            "BMAQJO",
+            "TLIBRA",
+            "SPULTE",
+            "AIMSOR",
+            "ENHRIS")
+
+        private val english25 = arrayOf(
+            "AAAFRS",
+            "AAEEEE",
+            "AAFIRS",
+            "ADENNN",
+            "AEEEEM",
+            "AEEGMU",
+            "AEGMNN",
+            "AFIRSY",
+            "BBJKXZ",
+            "CCENST",
+            "EIILST",
+            "CEIPST",
+            "DDHNOT",
+            "DHHLOR",
+            "DHHNOW",
+            "DHLNOR",
+            "EIIITT",
+            "EILPST",
+            "EMOTTT",
+            "ENSSSU",
+            "FIPRSY",
+            "GORRVW",
+            "IPRSYY",
+            "NOOTUW",
+            "OOOTTU")
     }
 }

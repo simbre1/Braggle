@@ -6,7 +6,7 @@
 
     <string name="app_name">Braggle</string>
 
-    <string name="title_activity_main">Braggle Board</string>
+    <string name="title_activity_main">Braggle</string>
     <string name="title_activity_all_words">All Words</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
@@ -102,10 +102,10 @@
     <string name="action_show_all_words">Show</string>
     <string name="element_text">%s</string>
     <string name="found_words">
-        <strong>Found %d/%d:</strong>
+        <strong>Found %d/%d %s words:</strong>
         %s
     </string>
     <string name="loading_new_game">
-        <strong>Searching all words...</strong>
+        <strong>Loading game...</strong>
     </string>
 </resources>

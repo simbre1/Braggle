@@ -23,7 +23,7 @@ fun getColor(context: Context?, colorId: Int) : Int? {
 
 class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
-    private var board = Board.random(4)
+    private var board: Board? = null
     private var hittables = listOf<Hittable>()
     private val hits = mutableListOf<BoardIndex>()
 
@@ -57,6 +57,8 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        val currentBoard = board ?: return true
+
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
                 val hit = hittables.find { collidable ->
@@ -78,7 +80,7 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 if (!hits.isEmpty()) {
-                    val word = hits.map { i -> board.at(i.first, i.second) }
+                    val word = hits.map { i -> currentBoard.at(i.first, i.second) }
                             .toCharArray()
                             .joinToString("")
                     wordListeners.forEach { l -> l.accept(word) }
@@ -97,11 +99,13 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
             return
         }
 
+        val currentBoard = board ?: return
+
         val w = canvas.width
         val h = canvas.height
 
         val size = min(w, h)
-        val cellSize = floor(size.toFloat() / board.size().toFloat())
+        val cellSize = floor(size.toFloat() / currentBoard.size().toFloat())
         val radius = cellSize / 2.2f
 
         val charWidth = radius * 0.75f
@@ -110,8 +114,8 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
 
         val updatedHittables = mutableListOf<Hittable>()
 
-        for (row in 0 until board.size()) {
-            for (col in 0 until board.size()) {
+        for (row in 0 until currentBoard.size()) {
+            for (col in 0 until currentBoard.size()) {
                 val x = col * cellSize
                 val y = row * cellSize
 
@@ -126,7 +130,7 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
                 canvas.drawCircle(cx, cy, radius, if (hit) circleStrokeHit else circleStroke)
                 canvas.drawCircle(cx, cy, radius * 0.9f, circleBg)
                 canvas.drawText(
-                        board.at(row, col).toString(),
+                        currentBoard.at(row, col).toString(),
                         cx - (charWidth / 2),
                         cy + (charWidth / 2),
                         if (hit) charHitStyle else charStyle)

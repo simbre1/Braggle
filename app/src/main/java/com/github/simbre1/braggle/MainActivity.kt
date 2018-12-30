@@ -73,6 +73,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createNewGame() {
+        wordView.text = getString(R.string.loading_new_game)
+
         val language = defaultSharedPreferences.getString("language_preference", "en")
             ?: "en"
         val minWordLength = defaultSharedPreferences.getString("minimum_word_length_preference", "4")?.toInt()
@@ -90,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 
         val intent = Intent(this, AllWordsActivity::class.java).apply {
             putExtra(ALL_WORDS, list.toTypedArray())
-            putExtra(DICTIONARY_LOOKUP_INTENT_PACKAGE, game.dictionary.lookupIntentPackage)
+            putExtra(DICTIONARY_LOOKUP_INTENT_PACKAGE, game.dictionary.language.dictionaryIntentPackage)
         }
         startActivity(intent)
     }
@@ -114,6 +116,11 @@ class MainActivity : AppCompatActivity() {
         val words = game.foundWords.toString()
         val foundN = game.foundWords.size
         val allN = game.allWords.size
-        wordView.text = getString(R.string.found_words, foundN, allN, words)
+        wordView.text = getString(
+            R.string.found_words,
+            foundN,
+            allN,
+            game.dictionary.language.displayName,
+            words)
     }
 }
