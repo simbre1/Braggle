@@ -40,12 +40,14 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
         val strokeColorHit = getColor(context, R.attr.colorAccent) ?: Color.RED
 
         circleStroke.color = strokeColor
-
         circleStroke.isAntiAlias = true
-        circleStrokeHit.color = strokeColorHit
 
+        circleStrokeHit.color = strokeColorHit
         circleStrokeHit.isAntiAlias = true
+
         circleBg.color = bgColor
+        circleBg.isAntiAlias = true
+
         charStyle.color = strokeColor
         charHitStyle.color = strokeColorHit
     }
@@ -62,15 +64,15 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
             MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
                 val hit = hittables.find { collidable ->
                     collidable.hit(
-                            event.getX(event.actionIndex),
-                            event.getY(event.actionIndex))
+                        event.getX(event.actionIndex),
+                        event.getY(event.actionIndex))
                 }
                 if (hit != null) {
                     if (hits.isEmpty()) {
                         hits.add(hit.getIndex())
                     } else if (hit.getIndex() != hits.last()) {
                         if (areConnected(hit.getIndex(), hits.last())
-                                && !hits.contains(hit.getIndex())) {
+                            && !hits.contains(hit.getIndex())) {
                             hits.add(hit.getIndex())
                         }
                     }
@@ -80,8 +82,8 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 if (!hits.isEmpty()) {
                     val word = hits.map { i -> currentBoard.at(i.first, i.second) }
-                            .toCharArray()
-                            .joinToString("")
+                        .toCharArray()
+                        .joinToString("")
                     wordListeners.forEach { l -> l.invoke(word) }
                     hits.clear()
                 }
@@ -129,10 +131,10 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
                 canvas.drawCircle(cx, cy, radius, if (hit) circleStrokeHit else circleStroke)
                 canvas.drawCircle(cx, cy, radius * 0.9f, circleBg)
                 canvas.drawText(
-                        currentBoard.at(row, col).toString(),
-                        cx - (charWidth / 2),
-                        cy + (charWidth / 2),
-                        if (hit) charHitStyle else charStyle)
+                    currentBoard.at(row, col).toString(),
+                    cx - (charWidth / 2),
+                    cy + (charWidth / 2),
+                    if (hit) charHitStyle else charStyle)
             }
         }
 
@@ -190,4 +192,3 @@ fun areConnected(a: BoardIndex, b: BoardIndex) : Boolean {
     return Math.abs(a.first - b.first) < 2
             && Math.abs(a.second - b.second) < 2
 }
-
