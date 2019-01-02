@@ -3,21 +3,29 @@ package com.github.simbre1.braggle
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.support.annotation.RawRes
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import org.jetbrains.anko.defaultSharedPreferences
+import kotlin.random.Random
 
 const val ALL_WORDS = "com.github.simbre1.braggle.ALL_WORDS"
 const val DICTIONARY_LOOKUP_INTENT_PACKAGE = "com.github.simbre1.braggle.DICTIONARY_LOOKUP_INTENT_PACKAGE"
 
 class MainActivity : AppCompatActivity() {
+
+    private val mediaPlayer = MediaPlayer().apply {
+        setOnPreparedListener { start() }
+        setOnCompletionListener { reset() }
+    }
 
     lateinit var gameModel: GameModel
 
@@ -100,15 +108,8 @@ class MainActivity : AppCompatActivity() {
     private fun onWord(game: Game, word: String) {
         if (game.isWord(word)) {
             if (game.addWord(word)) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    val vibratorService = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
-                    if (vibratorService != null && vibratorService.hasVibrator()) {
-                        vibratorService.vibrate(
-                            VibrationEffect.createOneShot(
-                                200,
-                                VibrationEffect.DEFAULT_AMPLITUDE))
-                    }
-                }
+                vibrate(200)
+                playCowbell()
             }
             updateFoundString(game)
         }
@@ -124,5 +125,44 @@ class MainActivity : AppCompatActivity() {
             allN,
             game.dictionary.language.displayName,
             words)
+    }
+
+    private fun vibrate(milliseconds: Long) {
+        if (defaultSharedPreferences.getBoolean("vibrate", false)
+            && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val vibratorService = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
+            if (vibratorService != null && vibratorService.hasVibrator()) {
+                vibratorService.vibrate(
+                    VibrationEffect.createOneShot(
+                        milliseconds,
+                        VibrationEffect.DEFAULT_AMPLITUDE))
+            }
+        }
+    }
+
+    private fun playCowbell() {
+        playSound(
+            resources.getIdentifier(
+                "cowbell_" + Random.nextInt(1, 23),
+                "raw",
+                packageName
+            )
+        )
+    }
+
+    private fun playSound(@RawRes rawResId: Int) {
+        if (!defaultSharedPreferences.getBoolean("sound_effects", false)) {
+            return
+        }
+
+        val assetFileDescriptor = applicationContext.resources.openRawResourceFd(rawResId) ?: return
+        mediaPlayer.run {
+            reset()
+            setDataSource(
+                assetFileDescriptor.fileDescriptor,
+                assetFileDescriptor.startOffset,
+                assetFileDescriptor.declaredLength)
+            prepareAsync()
+        }
     }
 }

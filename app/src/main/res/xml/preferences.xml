@@ -23,4 +23,14 @@
             app:entryValues="@array/boardSizeInt"
             app:defaultValue="4"
             app:summary="%s"/>
+
+    <SwitchPreference
+            app:key="sound_effects"
+            app:title="Cowbell"
+            app:defaultValue="true"/>
+
+    <SwitchPreference
+            app:key="vibrate"
+            app:title="Vibrate"
+            app:defaultValue="false"/>
 </PreferenceScreen>
