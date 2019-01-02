@@ -9,7 +9,6 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
-import java.util.function.Consumer
 import kotlin.math.floor
 import kotlin.math.min
 
@@ -27,7 +26,7 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
     private var hittables = listOf<Hittable>()
     private val hits = mutableListOf<BoardIndex>()
 
-    val wordListeners = mutableListOf<Consumer<String>>()
+    val wordListeners = mutableListOf<(String) -> Unit>()
 
     private val circleStroke = Paint()
     private val circleStrokeHit = Paint()
@@ -83,7 +82,7 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
                     val word = hits.map { i -> currentBoard.at(i.first, i.second) }
                             .toCharArray()
                             .joinToString("")
-                    wordListeners.forEach { l -> l.accept(word) }
+                    wordListeners.forEach { l -> l.invoke(word) }
                     hits.clear()
                 }
             }

@@ -3,6 +3,7 @@ package com.github.simbre1.braggle
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -12,7 +13,6 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import org.jetbrains.anko.defaultSharedPreferences
-import java.util.function.Consumer
 
 const val ALL_WORDS = "com.github.simbre1.braggle.ALL_WORDS"
 const val DICTIONARY_LOOKUP_INTENT_PACKAGE = "com.github.simbre1.braggle.DICTIONARY_LOOKUP_INTENT_PACKAGE"
@@ -29,12 +29,12 @@ class MainActivity : AppCompatActivity() {
         val factory = GameModelFactory(DictionaryRepo(application))
         gameModel = ViewModelProviders.of(this, factory).get(GameModel::class.java)
 
-        boardView.wordListeners.add(Consumer { word ->
+        boardView.wordListeners.add { word ->
             val currentGame = gameModel.game.value
             if(currentGame != null) {
                 onWord(currentGame, word)
             }
-        })
+        }
 
         gameModel.game.observe(this, android.arch.lifecycle.Observer { game ->
             if (game != null) {
@@ -100,12 +100,14 @@ class MainActivity : AppCompatActivity() {
     private fun onWord(game: Game, word: String) {
         if (game.isWord(word)) {
             if (game.addWord(word)) {
-                val vibratorService = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
-                if (vibratorService != null && vibratorService.hasVibrator()) {
-                    vibratorService.vibrate(
-                        VibrationEffect.createOneShot(
-                            200,
-                            VibrationEffect.DEFAULT_AMPLITUDE))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val vibratorService = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
+                    if (vibratorService != null && vibratorService.hasVibrator()) {
+                        vibratorService.vibrate(
+                            VibrationEffect.createOneShot(
+                                200,
+                                VibrationEffect.DEFAULT_AMPLITUDE))
+                    }
                 }
             }
             updateFoundString(game)
