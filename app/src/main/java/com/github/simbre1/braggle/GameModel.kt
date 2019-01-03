@@ -27,7 +27,7 @@ class GameModel(private val dictionaryRepo: DictionaryRepo) : ViewModel() {
 
         val language = Language.fromCode(dictionary) ?: Language.EN
 
-        val seedLong = seed?.hashCode()?.toLong() ?: Random.nextLong()
+        val seedLong = stringToSeed(seed)
         val board = Board.random(language, boardSize, seedLong)
         val dict = dictionaryRepo.get(language)
         val newGame = Game(
@@ -45,5 +45,16 @@ class GameModel(private val dictionaryRepo: DictionaryRepo) : ViewModel() {
         Log.d("createNewGame", "time:" + (System.nanoTime() - startTime))
 
         game.postValue(newGame)
+    }
+
+    companion object {
+        private fun stringToSeed(s: String?): Long {
+            val trimmed = s?.trim() ?: ""
+            return if (trimmed.isEmpty()) {
+                Random.nextLong()
+            } else {
+                trimmed.hashCode().toLong()
+            }
+        }
     }
 }
