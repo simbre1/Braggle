@@ -4,35 +4,44 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.util.Log
 import org.jetbrains.anko.doAsync
+import kotlin.random.Random
 
 class GameModel(private val dictionaryRepo: DictionaryRepo) : ViewModel() {
 
     val game: MutableLiveData<Game> = MutableLiveData()
-    val minWordLength = 4
 
     fun createNewGameAsync(dictionary: String,
                            minWordLength: Int,
-                           boardSize: Int) {
+                           boardSize: Int,
+                           seed: String?) {
         doAsync {
-            createNewGame(dictionary, minWordLength, boardSize)
+            createNewGame(dictionary, minWordLength, boardSize, seed)
         }
     }
 
     fun createNewGame(dictionary: String,
                       minWordLength: Int,
-                      boardSize: Int) {
+                      boardSize: Int,
+                      seed: String?) {
         val startTime = System.nanoTime()
 
         val language = Language.fromCode(dictionary) ?: Language.EN
 
-        val board = Board.random(language, boardSize)
+        val seedLong = seed?.hashCode()?.toLong() ?: Random.nextLong()
+        val board = Board.random(language, boardSize, seedLong)
         val dict = dictionaryRepo.get(language)
         val newGame = Game(
             board,
             dict,
-            WordFinder(board, dict).find(minWordLength))
+            WordFinder(board, dict).find(minWordLength),
+            true)
 
-        Log.d("createNewGame", "dict:" + dictionary + " minWordLength:" + minWordLength + " boardSize:" + boardSize)
+        Log.d(
+            "createNewGame",
+            "dict:" + dictionary +
+                    " minWordLength:" + minWordLength +
+                    " boardSize:" + boardSize +
+                    " seed:" + seed + "=" + seedLong)
         Log.d("createNewGame", "time:" + (System.nanoTime() - startTime))
 
         game.postValue(newGame)

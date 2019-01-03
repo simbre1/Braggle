@@ -9,9 +9,11 @@ import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.support.annotation.RawRes
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import org.jetbrains.anko.defaultSharedPreferences
@@ -52,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         if (gameModel.game.value == null) {
-            createNewGame()
+            createNewGame(null)
         }
     }
 
@@ -63,11 +65,34 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
         R.id.action_new_game -> {
-            createNewGame()
+            val builder = AlertDialog.Builder(this)
+            val seed = EditText(this)
+            builder.apply {
+                setPositiveButton(R.string.ok) { dialog, id -> createNewGame(seed.text.toString()) }
+                setNegativeButton(R.string.cancel) { dialog, id -> }
+            }
+            builder.setTitle(R.string.confirm_new_game)
+            builder.setView(seed)
+            builder.create().show()
+
             true
         }
         R.id.action_show_all_words -> {
-            showAllWords()
+            val game = gameModel.game.value
+            if (game != null) {
+                if(game.isRunning()) {
+                    val builder = AlertDialog.Builder(this)
+                    builder.apply {
+                        setPositiveButton(R.string.ok) { dialog, id -> showAllWords() }
+                        setNegativeButton(R.string.cancel) { dialog, id -> }
+                    }
+                    builder.setTitle(R.string.confirm_end_game)
+                    builder.create().show()
+                } else {
+                    showAllWords()
+                }
+            }
+
             true
         }
         R.id.action_settings -> {
@@ -80,7 +105,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun createNewGame() {
+    private fun createNewGame(seed: String?) {
         wordView.text = getString(R.string.loading_new_game)
 
         val language = defaultSharedPreferences.getString("language_preference", "en")
@@ -90,11 +115,12 @@ class MainActivity : AppCompatActivity() {
         val boardSize = defaultSharedPreferences.getString("board_size_preference", "4")?.toInt()
             ?: 4
 
-        gameModel.createNewGameAsync(language, minWordLength, boardSize)
+        gameModel.createNewGameAsync(language, minWordLength, boardSize, seed)
     }
 
     private fun showAllWords() {
         val game = gameModel.game.value ?: return
+        game.stop()
 
         val list = game.allWords.map { Pair(it, game.foundWords.contains(it)) }
 

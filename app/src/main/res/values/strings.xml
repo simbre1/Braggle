@@ -108,4 +108,8 @@
     <string name="loading_new_game">
         <strong>Loading game...</strong>
     </string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm_new_game">Start new game?</string>
+    <string name="confirm_end_game">End game?</string>
 </resources>
