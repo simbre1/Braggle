@@ -1,0 +1,1 @@
+grep -v '-' "$1" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' | grep -v ' ' | iconv -c -f utf8 -t ascii//TRANSLIT | sed -e 's/[^a-z]//g' | tr '[:lower:]' '[:upper:]' | grep '.\{3\}' | sort -u
