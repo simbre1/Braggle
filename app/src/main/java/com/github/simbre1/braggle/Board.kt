@@ -10,6 +10,8 @@ class Board(private var letters: Array<Array<Char>>) {
 
     fun size() = letters.size
 
+    fun getLetters() = letters.joinToString { it -> it.contentToString() }
+
     companion object Factory {
 
         fun random(langauge: Language, size: Int) : Board {
@@ -18,6 +20,11 @@ class Board(private var letters: Array<Array<Char>>) {
                 size,
                 Random().nextLong())
         }
+
+        fun random(language: Language,
+                   size: Int,
+                   seed: String?)
+                = random(language, size, stringToSeed(seed))
 
         fun random(language: Language,
                    size: Int,
@@ -36,6 +43,15 @@ class Board(private var letters: Array<Array<Char>>) {
             }
 
             return Board(letters)
+        }
+
+        private fun stringToSeed(s: String?): Long {
+            val trimmed = s?.trim() ?: ""
+            return if (trimmed.isEmpty()) {
+                kotlin.random.Random.nextLong()
+            } else {
+                trimmed.hashCode().toLong()
+            }
         }
 
         private fun getDice(language: Language, boardSize: Int): Array<String> =
