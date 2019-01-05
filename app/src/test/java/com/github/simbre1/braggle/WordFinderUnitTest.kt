@@ -2,14 +2,9 @@ package com.github.simbre1.braggle
 
 import org.junit.Test
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 class WordFinderUnitTest {
     @Test
-    fun find() {
+    fun testFind4() {
         val letters = arrayOf(
                 arrayOf(' ', ' ', 'b', ' '),
                 arrayOf(' ', 'l', 'o', 'e'),
@@ -21,7 +16,7 @@ class WordFinderUnitTest {
         val dict = Dictionary(sortedSetOf("bliep", "bloep", "blaap"), Language.EN)
 
         val finder = WordFinder(board, dict)
-        val found = finder.find()
+        val found = finder.find(4)
 
         assert(found.contains("bliep"))
         assert(found.contains("bloep"))
