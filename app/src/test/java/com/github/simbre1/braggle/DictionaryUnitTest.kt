@@ -14,7 +14,7 @@ class DictionaryUnitTest {
         val dict = Dictionary(
             TreeSet(
                 setOf("ab", "abc", "def")),
-            null)
+            Language.EN)
 
         assert(dict.isPrefix("ab"))
         assert(!dict.isPrefix("abc"))

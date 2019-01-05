@@ -18,7 +18,7 @@ class WordFinderUnitTest {
         )
 
         val board = Board(letters)
-        val dict = Dictionary(sortedSetOf("bliep", "bloep", "blaap"), null)
+        val dict = Dictionary(sortedSetOf("bliep", "bloep", "blaap"), Language.EN)
 
         val finder = WordFinder(board, dict)
         val found = finder.find()
