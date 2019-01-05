@@ -78,10 +78,9 @@ class MainActivity : AppCompatActivity() {
             true
         }
         R.id.action_show_all_words -> {
-            val game = gameModel.game.value
-            if (game != null) {
-                if(game.isRunning()) {
-                    val builder = AlertDialog.Builder(this)
+            gameModel.game.value?.run {
+                if (isRunning()) {
+                    val builder = AlertDialog.Builder(this@MainActivity)
                     builder.apply {
                         setPositiveButton(R.string.ok) { dialog, id -> showAllWords() }
                         setNegativeButton(R.string.cancel) { dialog, id -> }
@@ -92,7 +91,6 @@ class MainActivity : AppCompatActivity() {
                     showAllWords()
                 }
             }
-
             true
         }
         R.id.action_settings -> {
@@ -119,16 +117,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showAllWords() {
-        val game = gameModel.game.value ?: return
-        game.stop()
-
-        val list = game.allWords.map { Pair(it, game.foundWords.contains(it)) }
-
-        val intent = Intent(this, AllWordsActivity::class.java).apply {
-            putExtra(ALL_WORDS, list.toTypedArray())
-            putExtra(DICTIONARY_LOOKUP_INTENT_PACKAGE, game.dictionary.language.dictionaryIntentPackage)
+        gameModel.game.value?.run {
+            stop()
+            val list = allWords.map { Pair(it, foundWords.contains(it)) }
+            val intent = Intent(this@MainActivity, AllWordsActivity::class.java).apply {
+                putExtra(ALL_WORDS, list.toTypedArray())
+                putExtra(DICTIONARY_LOOKUP_INTENT_PACKAGE, dictionary.language.dictionaryIntentPackage)
+            }
+            startActivity(intent)
         }
-        startActivity(intent)
     }
 
     private fun onWord(game: Game, word: String) {
@@ -156,12 +153,13 @@ class MainActivity : AppCompatActivity() {
     private fun vibrate(milliseconds: Long) {
         if (defaultSharedPreferences.getBoolean("vibrate", false)
             && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val vibratorService = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
-            if (vibratorService != null && vibratorService.hasVibrator()) {
-                vibratorService.vibrate(
-                    VibrationEffect.createOneShot(
-                        milliseconds,
-                        VibrationEffect.DEFAULT_AMPLITUDE))
+            with(getSystemService(Context.VIBRATOR_SERVICE) as Vibrator) {
+                if (hasVibrator()) {
+                    vibrate(
+                        VibrationEffect.createOneShot(
+                            milliseconds,
+                            VibrationEffect.DEFAULT_AMPLITUDE))
+                }
             }
         }
     }
@@ -181,14 +179,15 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        val assetFileDescriptor = applicationContext.resources.openRawResourceFd(rawResId) ?: return
-        mediaPlayer.run {
-            reset()
-            setDataSource(
-                assetFileDescriptor.fileDescriptor,
-                assetFileDescriptor.startOffset,
-                assetFileDescriptor.declaredLength)
-            prepareAsync()
+        applicationContext.resources.openRawResourceFd(rawResId)?.let {
+            mediaPlayer.run {
+                reset()
+                setDataSource(
+                    it.fileDescriptor,
+                    it.startOffset,
+                    it.declaredLength)
+                prepareAsync()
+            }
         }
     }
 }
