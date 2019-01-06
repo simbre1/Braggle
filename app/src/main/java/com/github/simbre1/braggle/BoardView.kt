@@ -58,18 +58,17 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
 
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
-                val hit = hittables.find { collidable ->
+                hittables.find { collidable ->
                     collidable.hit(
                         event.getX(event.actionIndex),
                         event.getY(event.actionIndex))
-                }
-                if (hit != null) {
+                }?.also {
                     if (hits.isEmpty()) {
-                        hits.add(hit.getIndex())
-                    } else if (hit.getIndex() != hits.last()) {
-                        if (areConnected(hit.getIndex(), hits.last())
-                            && !hits.contains(hit.getIndex())) {
-                            hits.add(hit.getIndex())
+                        hits.add(it.getIndex())
+                    } else if (it.getIndex() != hits.last()) {
+                        if (areConnected(it.getIndex(), hits.last())
+                            && !hits.contains(it.getIndex())) {
+                            hits.add(it.getIndex())
                         }
                     }
                 }
