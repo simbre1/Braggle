@@ -18,6 +18,7 @@ typealias BoardIndex = Pair<Int, Int>
 class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     private var board: Board? = null
+    private var active = true
     private var hittables = listOf<Hittable>()
     private val hits = mutableListOf<BoardIndex>()
 
@@ -25,20 +26,21 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
 
     private val strokePaint = Paint()
     private val strokeHitPaint = Paint()
+    private val strokeDisabledPaint = Paint()
     private val backgroundPaint = Paint()
 
     init {
-        val strokeColor = getColor(context, R.attr.colorPrimary) ?: Color.BLACK
-        val bgColor = Color.WHITE
-        val strokeColorHit = getColor(context, R.attr.colorAccent) ?: Color.RED
 
-        strokePaint.color = strokeColor
+        strokePaint.color = getColor(context, R.attr.colorPrimary) ?: Color.BLACK
         strokePaint.isAntiAlias = true
 
-        strokeHitPaint.color = strokeColorHit
+        strokeHitPaint.color = getColor(context, R.attr.colorAccent) ?: Color.RED
         strokeHitPaint.isAntiAlias = true
 
-        backgroundPaint.color = bgColor
+        strokeDisabledPaint.color = Color.GRAY
+        strokeDisabledPaint.isAntiAlias = true
+
+        backgroundPaint.color = Color.WHITE
         backgroundPaint.isAntiAlias = true
 
         addOnLayoutChangeListener { _: View, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int ->
@@ -49,6 +51,11 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
     fun setBoard(newBoard : Board) {
         board = newBoard
         updateLayout()
+        invalidate()
+    }
+
+    fun setActive(active: Boolean) {
+        this.active = active
         invalidate()
     }
 
@@ -96,7 +103,9 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
                 val hit = hits.contains(it.getIndex())
                 it.draw(
                     this,
-                    if(hit) strokeHitPaint else strokePaint,
+                    if(!active) strokeDisabledPaint
+                    else if(hit) strokeHitPaint
+                    else strokePaint,
                     backgroundPaint)
             }
         }
@@ -112,6 +121,7 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
 
             setTextSizeForWidth(strokePaint, charWidth, "W")
             setTextSizeForWidth(strokeHitPaint, charWidth, "W")
+            setTextSizeForWidth(strokeDisabledPaint, charWidth, "W")
 
             val updatedHittables = mutableListOf<Hittable>()
 

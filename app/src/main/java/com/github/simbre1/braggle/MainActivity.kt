@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
             if (game != null) {
                 boardView.setBoard(game.board)
                 updateFoundString(game)
+                boardView.setActive(game.isRunning())
             }
         })
 
@@ -119,6 +120,8 @@ class MainActivity : AppCompatActivity() {
     private fun showAllWords() {
         gameModel.game.value?.run {
             stop()
+            boardView.setActive(false)
+
             val list = allWords.map { Pair(it, foundWords.contains(it)) }
             val intent = Intent(this@MainActivity, AllWordsActivity::class.java).apply {
                 putExtra(ALL_WORDS, list.toTypedArray())
