@@ -29,12 +29,14 @@ class Board(private var letters: Array<Array<String>>) {
         fun random(language: Language,
                    size: Int,
                    seed: Long): Board {
-            val dice = getDice(language, size)
+            val rand = Random(seed)
+            val dice = mutableListOf<Array<String>>()
+            dice.addAll(getDice(language, size))
             if (dice.isEmpty()) {
                 throw IllegalArgumentException("no dice")
             }
+            dice.shuffle(rand)
 
-            val rand = Random(seed)
             val letters = Array(size) { i ->
                 Array(size) { j ->
                     val diceNr = ((i*size) + j) % dice.size
