@@ -6,7 +6,7 @@ class Dictionary(private val words: TreeSet<String>,
                  val language: Language) {
 
     fun isWord(s: String): Boolean {
-        return words.contains(s)
+        return words.contains(s.toUpperCase())
     }
 
     fun getWords() : SortedSet<String> = words
@@ -14,7 +14,7 @@ class Dictionary(private val words: TreeSet<String>,
     /**
      * String is a prefix for a larger word in this dictionary.
      */
-    fun isPrefix(s: String) : Boolean = isPrefix(words, s)
+    fun isPrefix(s: String) : Boolean = isPrefix(words, s.toUpperCase())
 
     companion object {
         /**

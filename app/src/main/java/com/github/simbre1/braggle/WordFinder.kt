@@ -37,7 +37,7 @@ class WordFinder(var board: Board, var dictionary: Dictionary) {
                                minWordLength: Int) : Long {
         val currentBit = 1L shl (row * size) + col
         var hasVisited = visited or currentBit
-        s.append(board.at(row, col))
+        s.append(board.at(row, col).toUpperCase())
 
         val word = s.toString()
         val tailset = dictWords.tailSet(word)

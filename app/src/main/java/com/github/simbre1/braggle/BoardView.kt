@@ -77,8 +77,8 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 if (!hits.isEmpty()) {
                     val word = hits.map { i -> currentBoard.at(i.first, i.second) }
-                        .toCharArray()
                         .joinToString("")
+                        .toUpperCase()
                     wordListeners.forEach { l -> l.invoke(word) }
                     hits.clear()
                 }
@@ -130,7 +130,7 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
                             cy,
                             radius,
                             index,
-                            at(index).toString()))
+                            at(index)))
                 }
             }
 
