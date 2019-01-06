@@ -19,7 +19,7 @@ class WordFinder(var board: Board, var dictionary: Dictionary) {
                     board.size(),
                     row,
                     col,
-                    StringBuilder(),
+                    mutableListOf(),
                     minWordLength)
             }
         }
@@ -33,13 +33,13 @@ class WordFinder(var board: Board, var dictionary: Dictionary) {
                                size: Int,
                                row: Int,
                                col: Int,
-                               s: StringBuilder,
+                               dice: MutableList<String>,
                                minWordLength: Int) : Long {
         val currentBit = 1L shl (row * size) + col
         var hasVisited = visited or currentBit
-        s.append(board.at(row, col).toUpperCase())
+        dice.add(board.at(row, col).toUpperCase())
 
-        val word = s.toString()
+        val word = dice.joinToString("")
         val tailset = dictWords.tailSet(word)
 
         if (!tailset.isEmpty()) {
@@ -70,7 +70,7 @@ class WordFinder(var board: Board, var dictionary: Dictionary) {
                                 size,
                                 i,
                                 j,
-                                s,
+                                dice,
                                 minWordLength)
                         }
                     }
@@ -78,7 +78,7 @@ class WordFinder(var board: Board, var dictionary: Dictionary) {
             }
         }
 
-        s.deleteCharAt(s.length - 1)
+        dice.removeAt(dice.size - 1)
 
         return hasVisited and currentBit.inv()
     }

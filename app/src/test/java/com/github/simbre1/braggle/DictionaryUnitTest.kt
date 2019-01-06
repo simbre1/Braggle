@@ -8,12 +8,12 @@ class DictionaryUnitTest {
     fun testPrefix() {
         val dict = Dictionary(
             TreeSet(
-                setOf("ab", "abc", "def")),
+                setOf("AB", "ABC", "DEF")),
             Language.EN)
 
-        assert(dict.isPrefix("ab"))
-        assert(!dict.isPrefix("abc"))
-        assert(!dict.isPrefix("b"))
-        assert(dict.isPrefix("de"))
+        assert(dict.isPrefix("AB"))
+        assert(!dict.isPrefix("ABC"))
+        assert(!dict.isPrefix("B"))
+        assert(dict.isPrefix("DE"))
     }
 }

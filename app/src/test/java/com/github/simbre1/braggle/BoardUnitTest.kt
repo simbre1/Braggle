@@ -8,6 +8,6 @@ class BoardUnitTest {
         assert(
             Board.random(Language.EN, 4, "test")
                 .getLetters()
-                    == "[E, O, H, K], [W, C, L, L], [Y, H, N, T], [T, Y, H, L]")
+                    == "[A, J, H, T], [U, L, D, A], [P, E, N, U], [S, I, T, T]")
     }
 }
