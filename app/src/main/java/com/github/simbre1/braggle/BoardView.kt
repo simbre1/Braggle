@@ -1,5 +1,6 @@
 package com.github.simbre1.braggle
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -12,13 +13,7 @@ import android.view.View
 import kotlin.math.floor
 import kotlin.math.min
 
-fun getColor(context: Context?, colorId: Int) : Int? {
-    val typedValue = TypedValue()
-    val a = context?.obtainStyledAttributes(typedValue.data, intArrayOf(colorId))
-    val color = a?.getColor(0, 0)
-    a?.recycle()
-    return color
-}
+typealias BoardIndex = Pair<Int, Int>
 
 class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
@@ -28,35 +23,36 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
 
     val wordListeners = mutableListOf<(String) -> Unit>()
 
-    private val circleStroke = Paint()
-    private val circleStrokeHit = Paint()
-    private val circleBg = Paint()
-    private val charStyle = Paint()
-    private val charHitStyle = Paint()
+    private val strokePaint = Paint()
+    private val strokeHitPaint = Paint()
+    private val backgroundPaint = Paint()
 
     init {
         val strokeColor = getColor(context, R.attr.colorPrimary) ?: Color.BLACK
         val bgColor = Color.WHITE
         val strokeColorHit = getColor(context, R.attr.colorAccent) ?: Color.RED
 
-        circleStroke.color = strokeColor
-        circleStroke.isAntiAlias = true
+        strokePaint.color = strokeColor
+        strokePaint.isAntiAlias = true
 
-        circleStrokeHit.color = strokeColorHit
-        circleStrokeHit.isAntiAlias = true
+        strokeHitPaint.color = strokeColorHit
+        strokeHitPaint.isAntiAlias = true
 
-        circleBg.color = bgColor
-        circleBg.isAntiAlias = true
+        backgroundPaint.color = bgColor
+        backgroundPaint.isAntiAlias = true
 
-        charStyle.color = strokeColor
-        charHitStyle.color = strokeColorHit
+        addOnLayoutChangeListener { _: View, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int ->
+            updateLayout()
+        }
     }
 
     fun setBoard(newBoard : Board) {
         board = newBoard
+        updateLayout()
         invalidate()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val currentBoard = board ?: return true
 
@@ -96,85 +92,69 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        if (canvas == null) {
-            return
-        }
-
-        val currentBoard = board ?: return
-
-        val w = canvas.width
-        val h = canvas.height
-
-        val size = min(w, h)
-        val cellSize = floor(size.toFloat() / currentBoard.size().toFloat())
-        val radius = cellSize / 2.2f
-
-        val charWidth = radius * 0.75f
-        setTextSizeForWidth(charStyle, charWidth, "W")
-        setTextSizeForWidth(charHitStyle, charWidth, "W")
-
-        val updatedHittables = mutableListOf<Hittable>()
-
-        for (row in 0 until currentBoard.size()) {
-            for (col in 0 until currentBoard.size()) {
-                val x = col * cellSize
-                val y = row * cellSize
-
-                val cx = x + cellSize / 2
-                val cy = y + cellSize / 2
-
-                val index = BoardIndex(row, col)
-                updatedHittables.add(Circle(cx, cy, charWidth, index))
-
-
-                val hit = hits.contains(index)
-                canvas.drawCircle(cx, cy, radius, if (hit) circleStrokeHit else circleStroke)
-                canvas.drawCircle(cx, cy, radius * 0.9f, circleBg)
-                canvas.drawText(
-                    currentBoard.at(row, col).toString(),
-                    cx - (charWidth / 2),
-                    cy + (charWidth / 2),
-                    if (hit) charHitStyle else charStyle)
+        canvas?.run {
+            hittables.forEach {
+                val hit = hits.contains(it.getIndex())
+                it.draw(
+                    this,
+                    if(hit) strokeHitPaint else strokePaint,
+                    backgroundPaint)
             }
         }
-
-        hittables = updatedHittables
     }
 
-    private fun setTextSizeForWidth(paint: Paint,
-                                    desiredWidth: Float,
-                                    text: String) {
+    private fun updateLayout() {
+        board?.run {
+            val canvasSize = min(width, height)
+            val cellSize = floor(canvasSize.toFloat() / size().toFloat())
+            val radius = cellSize / 2.2f
 
-        // Pick a reasonably large value for the test. Larger values produce
-        // more accurate results, but may cause problems with hardware
-        // acceleration. But there are workarounds for that, too; refer to
-        // http://stackoverflow.com/questions/6253528/font-size-too-large-to-fit-in-cache
-        val testTextSize = 48f
+            val charWidth = radius * 0.75f
 
-        // Get the bounds of the text, using our testTextSize.
-        paint.textSize = testTextSize
-        val bounds = Rect()
-        paint.getTextBounds(text, 0, text.length, bounds)
+            setTextSizeForWidth(strokePaint, charWidth, "W")
+            setTextSizeForWidth(strokeHitPaint, charWidth, "W")
 
-        // Calculate the desired size as a proportion of our testTextSize.
-        val desiredTextSize = testTextSize * desiredWidth / bounds.width()
+            val updatedHittables = mutableListOf<Hittable>()
 
-        // Set the paint for that size.
-        paint.textSize = desiredTextSize
+            for (row in 0 until size()) {
+                for (col in 0 until size()) {
+                    val x = col * cellSize
+                    val y = row * cellSize
+
+                    val cx = x + cellSize / 2
+                    val cy = y + cellSize / 2
+
+                    val index = BoardIndex(row, col)
+                    updatedHittables.add(
+                        Circle(
+                            cx,
+                            cy,
+                            radius,
+                            index,
+                            at(index).toString()))
+                }
+            }
+
+            hittables = updatedHittables
+        }
     }
 
     interface Hittable {
         fun hit(x: Float, y: Float) : Boolean
         fun getIndex() : BoardIndex
+        fun draw(canvas: Canvas,
+                 paintStroke: Paint,
+                 paintBackground: Paint)
     }
 
     class Circle(private val cx: Float,
                  private val cy: Float,
                  private val radius: Float,
-                 private val index: BoardIndex) : Hittable {
+                 private val index: BoardIndex,
+                 private val text: String) : Hittable {
         override fun hit(x: Float, y: Float): Boolean {
-            return Math.abs(x - cx) < radius
-                    && Math.abs(y - cy) < radius
+            return Math.abs(x - cx) < (radius * 0.75)
+                    && Math.abs(y - cy) < (radius * 0.75)
         }
 
         override fun getIndex(): BoardIndex {
@@ -184,11 +164,55 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
         override fun toString(): String {
             return "Circle(cx=$cx, cy=$cy, radius=$radius, index=$index)"
         }
-    }
-}
 
-typealias BoardIndex = Pair<Int, Int>
-fun areConnected(a: BoardIndex, b: BoardIndex) : Boolean {
-    return Math.abs(a.first - b.first) < 2
-            && Math.abs(a.second - b.second) < 2
+        override fun draw(canvas: Canvas,
+                          paintStroke: Paint,
+                          paintBackground: Paint) {
+            val charWidth = radius * 0.75f
+            canvas.drawCircle(cx, cy, radius, paintStroke)
+            canvas.drawCircle(cx, cy, radius * 0.9f, paintBackground)
+            canvas.drawText(
+                text,
+                cx - (charWidth / 2),
+                cy + (charWidth / 2),
+                paintStroke)
+        }
+    }
+
+    companion object {
+        fun getColor(context: Context?, colorId: Int) : Int? {
+            val typedValue = TypedValue()
+            val a = context?.obtainStyledAttributes(typedValue.data, intArrayOf(colorId))
+            val color = a?.getColor(0, 0)
+            a?.recycle()
+            return color
+        }
+
+        private fun areConnected(a: BoardIndex, b: BoardIndex) : Boolean {
+            return Math.abs(a.first - b.first) < 2
+                    && Math.abs(a.second - b.second) < 2
+        }
+
+        private fun setTextSizeForWidth(paint: Paint,
+                                        desiredWidth: Float,
+                                        text: String) {
+
+            // Pick a reasonably large value for the test. Larger values produce
+            // more accurate results, but may cause problems with hardware
+            // acceleration. But there are workarounds for that, too; refer to
+            // http://stackoverflow.com/questions/6253528/font-size-too-large-to-fit-in-cache
+            val testTextSize = 48f
+
+            // Get the bounds of the text, using our testTextSize.
+            paint.textSize = testTextSize
+            val bounds = Rect()
+            paint.getTextBounds(text, 0, text.length, bounds)
+
+            // Calculate the desired size as a proportion of our testTextSize.
+            val desiredTextSize = testTextSize * desiredWidth / bounds.width()
+
+            // Set the paint for that size.
+            paint.textSize = desiredTextSize
+        }
+    }
 }

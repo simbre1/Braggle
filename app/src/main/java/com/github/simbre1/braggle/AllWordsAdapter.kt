@@ -41,7 +41,7 @@ class AllWordsAdapter(private val myDataset: List<Pair<String, Boolean>>,
         val word = myDataset[position].first
         holder.textView.text = word
         if (myDataset[position].second) {
-            holder.textView.setTextColor(getColor(holder.view.context, R.attr.colorAccent) ?: Color.CYAN)
+            holder.textView.setTextColor(BoardView.getColor(holder.view.context, R.attr.colorAccent) ?: Color.CYAN)
         } else {
             holder.textView.setTextColor(Color.DKGRAY)
         }
