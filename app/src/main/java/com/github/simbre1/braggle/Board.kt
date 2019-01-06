@@ -59,8 +59,7 @@ class Board(private var letters: Array<Array<String>>) {
         private fun getDice(language: Language, boardSize: Int): Array<Array<String>> =
             when (language) {
                 Language.EN -> if (boardSize < 5) english16 else english25
-                Language.FR -> french16
-                Language.NL -> TODO()
+                Language.FR, Language.NL -> french16
             }
 
         private val english16 = arrayOf(
