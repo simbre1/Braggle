@@ -16,6 +16,19 @@ class Board(val seed: Long,
 
     companion object Factory {
 
+        fun create(seed: Long,
+                   seedString: String?,
+                   joinedLetters: String): Board {
+            return Board(
+                seed,
+                seedString,
+                joinedLetters.split(";")
+                    .map {
+                        it.split(",")
+                            .toTypedArray()
+                    }.toTypedArray())
+        }
+
         fun random(langauge: Language,
                    size: Int)
                 = random(langauge, size, Random().nextLong(), null)

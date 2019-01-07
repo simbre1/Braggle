@@ -38,7 +38,7 @@ class GameModel(private val dictionaryRepo: DictionaryRepo) : ViewModel() {
         val newGame = Game(
             null,
             board,
-            dict,
+            language,
             WordFinder(board, dict).find(minWordLength),
             Date(),
             null)

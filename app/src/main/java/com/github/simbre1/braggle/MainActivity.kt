@@ -74,8 +74,8 @@ class MainActivity : AppCompatActivity() {
             val builder = AlertDialog.Builder(this)
             val seed = EditText(this)
             builder.apply {
-                setPositiveButton(R.string.ok) { dialog, id -> createNewGame(seed.text.toString()) }
-                setNegativeButton(R.string.cancel) { dialog, id -> }
+                setPositiveButton(R.string.ok) { _, _ -> createNewGame(seed.text.toString()) }
+                setNegativeButton(R.string.cancel) { _, _ -> }
             }
             builder.setTitle(R.string.confirm_new_game)
             builder.setView(seed)
@@ -88,8 +88,8 @@ class MainActivity : AppCompatActivity() {
                 if (isRunning()) {
                     val builder = AlertDialog.Builder(this@MainActivity)
                     builder.apply {
-                        setPositiveButton(R.string.ok) { dialog, id -> showAllWords() }
-                        setNegativeButton(R.string.cancel) { dialog, id -> }
+                        setPositiveButton(R.string.ok) { _, _ -> showAllWords() }
+                        setNegativeButton(R.string.cancel) { _, _ -> }
                     }
                     builder.setTitle(R.string.confirm_end_game)
                     builder.create().show()
@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity() {
             val list = allWords.map { Pair(it, foundWords.contains(it)) }
             val intent = Intent(this@MainActivity, AllWordsActivity::class.java).apply {
                 putExtra(ALL_WORDS, list.toTypedArray())
-                putExtra(DICTIONARY_LOOKUP_INTENT_PACKAGE, dictionary.language.dictionaryIntentPackage)
+                putExtra(DICTIONARY_LOOKUP_INTENT_PACKAGE, language.dictionaryIntentPackage)
             }
             startActivity(intent)
         }
@@ -154,7 +154,7 @@ class MainActivity : AppCompatActivity() {
             R.string.found_words,
             foundN,
             allN,
-            game.dictionary.language.displayName,
+            game.language.displayName,
             words)
     }
 

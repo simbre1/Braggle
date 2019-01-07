@@ -5,7 +5,7 @@ import java.util.*
 
 class Game(val uid: Int?,
            val board: Board,
-           val dictionary: Dictionary,
+           val language: Language,
            val allWords: TreeSet<String>,
            val startTime: Date,
            private var stopTime: Date?) {
@@ -25,7 +25,7 @@ class Game(val uid: Int?,
     fun toGameData(): GameData {
         return GameData(
             uid,
-            dictionary.language.code,
+            language.code,
             board.size(),
             board.seed,
             board.seedString,
@@ -36,8 +36,19 @@ class Game(val uid: Int?,
     }
 
     companion object {
-        fun create(gameData: GameData) {
-            TODO()
+        fun create(gameData: GameData): Game {
+            return Game(
+                gameData.uid,
+                Board.create(
+                    gameData.seed,
+                    gameData.seedString,
+                    gameData.board),
+                Language.fromCode(gameData.language)!!,
+                gameData.foundWords?.run {
+                    TreeSet(split(";"))
+                } ?: TreeSet(),
+                gameData.startTime,
+                gameData.stopTime)
         }
     }
 }
