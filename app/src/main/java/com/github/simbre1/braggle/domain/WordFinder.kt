@@ -1,4 +1,4 @@
-package com.github.simbre1.braggle
+package com.github.simbre1.braggle.domain
 
 import java.util.*
 

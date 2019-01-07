@@ -15,6 +15,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.github.simbre1.braggle.data.DictionaryRepo
+import com.github.simbre1.braggle.domain.Game
+import com.github.simbre1.braggle.viewmodel.GameModel
+import com.github.simbre1.braggle.viewmodel.GameModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import org.jetbrains.anko.defaultSharedPreferences

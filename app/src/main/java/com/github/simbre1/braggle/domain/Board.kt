@@ -1,8 +1,10 @@
-package com.github.simbre1.braggle
+package com.github.simbre1.braggle.domain
 
 import java.util.*
 
-class Board(private var letters: Array<Array<String>>) {
+class Board(val seed: Long,
+            val seedString: String?,
+            private var letters: Array<Array<String>>) {
 
     fun at(row: Int, col: Int) = letters[row][col]
 
@@ -10,25 +12,23 @@ class Board(private var letters: Array<Array<String>>) {
 
     fun size() = letters.size
 
-    fun getLetters() = letters.joinToString { it -> it.contentToString() }
+    fun getLetters() = letters.joinToString(";") { it -> it.joinToString(",") }
 
     companion object Factory {
 
-        fun random(langauge: Language, size: Int) : Board {
-            return random(
-                langauge,
-                size,
-                Random().nextLong())
-        }
+        fun random(langauge: Language,
+                   size: Int)
+                = random(langauge, size, Random().nextLong(), null)
 
         fun random(language: Language,
                    size: Int,
                    seed: String?)
-                = random(language, size, stringToSeed(seed))
+                = random(language, size, stringToSeed(seed), seed)
 
         fun random(language: Language,
                    size: Int,
-                   seed: Long): Board {
+                   seed: Long,
+                   seedString: String?): Board {
             val rand = Random(seed)
             val dice = mutableListOf<Array<String>>()
             dice.addAll(getDice(language, size))
@@ -44,7 +44,7 @@ class Board(private var letters: Array<Array<String>>) {
                 }
             }
 
-            return Board(letters)
+            return Board(seed, seedString, letters)
         }
 
         private fun stringToSeed(s: String?): Long {

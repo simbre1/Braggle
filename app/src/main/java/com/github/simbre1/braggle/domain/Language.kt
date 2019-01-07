@@ -1,4 +1,4 @@
-package com.github.simbre1.braggle
+package com.github.simbre1.braggle.domain
 
 enum class Language(val code: String,
                     val displayName: String,

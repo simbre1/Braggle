@@ -1,6 +1,8 @@
-package com.github.simbre1.braggle
+package com.github.simbre1.braggle.data
 
 import android.app.Application
+import com.github.simbre1.braggle.domain.Dictionary
+import com.github.simbre1.braggle.domain.Language
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -20,12 +22,14 @@ class DictionaryRepo(private val application: Application) {
     }
 
     private fun loadDictionary(asset: String,
-                               language: Language) : Dictionary {
+                               language: Language
+    ) : Dictionary {
         return Dictionary(
             application.assets.open(asset)
                 .bufferedReader()
                 .readLines()
                 .toCollection(TreeSet()),
-            language)
+            language
+        )
     }
 }

@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
+import com.github.simbre1.braggle.domain.Board
 import kotlin.math.floor
 import kotlin.math.min
 

@@ -1,5 +1,9 @@
 package com.github.simbre1.braggle
 
+import com.github.simbre1.braggle.domain.Board
+import com.github.simbre1.braggle.domain.Dictionary
+import com.github.simbre1.braggle.domain.Language
+import com.github.simbre1.braggle.domain.WordFinder
 import org.junit.Test
 
 class WordFinderUnitTest {
@@ -12,10 +16,11 @@ class WordFinderUnitTest {
                 arrayOf("A",  "T", "P", "E")
         )
 
-        val board = Board(letters)
+        val board = Board(0L, null, letters)
         val dict = Dictionary(
             sortedSetOf("BLIEP", "BLOEP", "BLAAP", "QUEST"),
-            Language.EN)
+            Language.EN
+        )
 
         val finder = WordFinder(board, dict)
         val found = finder.find(4)

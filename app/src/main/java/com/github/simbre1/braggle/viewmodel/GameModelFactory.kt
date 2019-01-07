@@ -1,7 +1,8 @@
-package com.github.simbre1.braggle
+package com.github.simbre1.braggle.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.github.simbre1.braggle.data.DictionaryRepo
 
 class GameModelFactory(private val dictionaryRepo: DictionaryRepo) : ViewModelProvider.Factory {
 
