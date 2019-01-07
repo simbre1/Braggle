@@ -1,8 +1,10 @@
 package com.github.simbre1.braggle.viewmodel
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.github.simbre1.braggle.data.AppDatabase
 import com.github.simbre1.braggle.data.DictionaryRepo
 import com.github.simbre1.braggle.domain.Board
 import com.github.simbre1.braggle.domain.Game
@@ -49,5 +51,26 @@ class GameModel(private val dictionaryRepo: DictionaryRepo) : ViewModel() {
         Log.d("createNewGame", "time:" + (System.nanoTime() - startTime))
 
         game.postValue(newGame)
+    }
+
+    fun loadLastGameAsync(context: Context,
+                          onFail: () -> Unit) {
+        doAsync {
+            AppDatabase.getInstance(context)
+                .gameDataDao()
+                .getLast()?.also {
+                    game.postValue(Game.create(it))
+                } ?: onFail.invoke()
+        }
+    }
+
+    fun save(context: Context) {
+        doAsync {
+            game.value?.apply {
+                AppDatabase.getInstance(context)
+                    .gameDataDao()
+                    .insertAll(toGameData())
+            }
+        }
     }
 }

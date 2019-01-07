@@ -60,8 +60,13 @@ class MainActivity : AppCompatActivity() {
         })
 
         if (gameModel.game.value == null) {
-            createNewGame(null)
+            loadLastGame()
         }
+    }
+
+    override fun onStop() {
+        gameModel.save(this)
+        super.onStop()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -107,6 +112,13 @@ class MainActivity : AppCompatActivity() {
         else -> {
             super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun loadLastGame() {
+        //TODO find all words for loaded game
+
+        wordView.text = getString(R.string.loading_new_game)
+        gameModel.loadLastGameAsync(this) { createNewGame(null) }
     }
 
     private fun createNewGame(seed: String?) {
