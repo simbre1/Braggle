@@ -1,7 +1,7 @@
 <resources>
     <!-- The class name to the ScrollingChildBehavior required for AppBarLayout -->
     <string name="appbar_scrolling_view_behavior" translatable="false">
-        android.support.design.widget.AppBarLayout$ScrollingViewBehavior
+        com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior
     </string>
 
     <string name="app_name">Braggle</string>

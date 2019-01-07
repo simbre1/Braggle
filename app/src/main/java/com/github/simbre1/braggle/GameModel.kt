@@ -1,8 +1,8 @@
 package com.github.simbre1.braggle
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import org.jetbrains.anko.doAsync
 
 class GameModel(private val dictionaryRepo: DictionaryRepo) : ViewModel() {

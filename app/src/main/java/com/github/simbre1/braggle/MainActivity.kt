@@ -1,6 +1,5 @@
 package com.github.simbre1.braggle
 
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
@@ -8,12 +7,14 @@ import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.support.annotation.RawRes
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
+import androidx.annotation.RawRes
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import org.jetbrains.anko.defaultSharedPreferences
@@ -46,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        gameModel.game.observe(this, android.arch.lifecycle.Observer { game ->
+        gameModel.game.observe(this, Observer { game ->
             if (game != null) {
                 boardView.setBoard(game.board)
                 updateFoundString(game)
