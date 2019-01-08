@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
 
         gameModel.game.observe(this, Observer { game ->
             if (game != null) {
+                supportActionBar?.title = getString(R.string.title_activity_main, game.board.seedString)
                 boardView.setBoard(game.board)
                 updateFoundString(game)
                 boardView.setActive(game.isRunning())
@@ -115,8 +116,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadLastGame() {
-        //TODO find all words for loaded game
-
         wordView.text = getString(R.string.loading_new_game)
         gameModel.loadLastGameAsync(this) { createNewGame(null) }
     }
