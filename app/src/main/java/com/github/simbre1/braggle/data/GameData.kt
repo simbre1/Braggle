@@ -13,7 +13,8 @@ data class GameData (
     @ColumnInfo(name = "seed") var seed: Long,
     @ColumnInfo(name = "seedString") var seedString: String?,
     @ColumnInfo(name = "board") var board: String,
-    @ColumnInfo(name = "foundWords") var foundWords: String?,
+    @ColumnInfo(name = "allWords") var allWords: TreeSet<String>,
+    @ColumnInfo(name = "foundWords") var foundWords: TreeSet<String>,
     @ColumnInfo(name = "startTime") var startTime: Date,
     @ColumnInfo(name = "stopTime") var stopTime: Date?
 )

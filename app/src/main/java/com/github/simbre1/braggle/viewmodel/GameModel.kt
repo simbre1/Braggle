@@ -42,6 +42,7 @@ class GameModel(private val dictionaryRepo: DictionaryRepo) : ViewModel() {
             board,
             language,
             WordFinder(board, dict).find(minWordLength),
+            TreeSet(),
             Date(),
             null)
 
@@ -67,9 +68,15 @@ class GameModel(private val dictionaryRepo: DictionaryRepo) : ViewModel() {
     fun save(context: Context) {
         doAsync {
             game.value?.apply {
-                AppDatabase.getInstance(context)
-                    .gameDataDao()
-                    .insertAll(toGameData())
+                if (uid == null) {
+                    AppDatabase.getInstance(context)
+                        .gameDataDao()
+                        .insertAll(toGameData())
+                } else {
+                    AppDatabase.getInstance(context)
+                        .gameDataDao()
+                        .update(uid, foundWords, getStopTime())
+                }
             }
         }
     }

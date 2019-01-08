@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import java.util.*
 
 @Dao
 interface GameDataDao {
@@ -18,6 +19,9 @@ interface GameDataDao {
 
     @Insert
     fun insertAll(vararg gameDatas: GameData)
+
+    @Query("update gameData set foundWords=:foundWords, stopTime=:stopTime where uid=:uid")
+    fun update(uid: Int, foundWords: TreeSet<String>, stopTime: Date?)
 
     @Delete
     fun delete(gameData: GameData)

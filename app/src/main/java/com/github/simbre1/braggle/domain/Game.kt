@@ -7,10 +7,9 @@ class Game(val uid: Int?,
            val board: Board,
            val language: Language,
            val allWords: TreeSet<String>,
-           val startTime: Date,
+           val foundWords: TreeSet<String>,
+           private val startTime: Date,
            private var stopTime: Date?) {
-
-    val foundWords = TreeSet<String>()
 
     fun isWord(word: String) = allWords.contains(word)
 
@@ -22,6 +21,8 @@ class Game(val uid: Int?,
         stopTime = Date()
     }
 
+    fun getStopTime() = stopTime
+
     fun toGameData(): GameData {
         return GameData(
             uid,
@@ -30,7 +31,8 @@ class Game(val uid: Int?,
             board.seed,
             board.seedString,
             board.getLetters(),
-            foundWords.joinToString { ";" },
+            allWords,
+            foundWords,
             startTime,
             stopTime)
     }
@@ -44,9 +46,8 @@ class Game(val uid: Int?,
                     gameData.seedString,
                     gameData.board),
                 Language.fromCode(gameData.language)!!,
-                gameData.foundWords?.run {
-                    TreeSet(split(";"))
-                } ?: TreeSet(),
+                gameData.allWords,
+                gameData.foundWords,
                 gameData.startTime,
                 gameData.stopTime)
         }
