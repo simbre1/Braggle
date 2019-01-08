@@ -52,12 +52,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         gameModel.game.observe(this, Observer { game ->
-            if (game != null) {
-                supportActionBar?.title = getString(R.string.title_activity_main, game.board.seedString)
-                boardView.setBoard(game.board)
-                updateFoundString(game)
-                boardView.setActive(game.isRunning())
-            }
+            supportActionBar?.title = getString(
+                R.string.title_activity_main_seed,
+                game.board.seedString ?: "")
+            boardView.setBoard(game.board)
+            updateFoundString(game)
+            boardView.setActive(game.isRunning())
         })
 
         if (gameModel.game.value == null) {
