@@ -15,12 +15,20 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromWordlist(value: String?): TreeSet<String> {
-        return value?.let { TreeSet(it.split(";")) } ?: TreeSet()
+    fun stringToWordlist(value: String?): TreeSet<String> {
+        if (value == null || value.isBlank()) {
+            return TreeSet()
+        } else {
+            return TreeSet(value.split(";"))
+        }
     }
 
     @TypeConverter
     fun wordlistToString(wordlist: TreeSet<String>?): String? {
-        return wordlist?.joinToString(";")
+        if (wordlist == null || wordlist.isEmpty()) {
+            return ""
+        } else {
+            return wordlist.joinToString(";")
+        }
     }
 }
