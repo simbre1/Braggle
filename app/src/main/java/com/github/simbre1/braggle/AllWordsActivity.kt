@@ -1,11 +1,10 @@
 package com.github.simbre1.braggle
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class AllWordsActivity : AppCompatActivity() {
+class AllWordsActivity : BaseActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>

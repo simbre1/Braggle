@@ -32,16 +32,16 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
 
     init {
 
-        strokePaint.color = getColor(context, R.attr.colorPrimary) ?: Color.BLACK
+        strokePaint.color = getColor(context, R.attr.colorDice) ?: Color.BLACK
         strokePaint.isAntiAlias = true
 
-        strokeHitPaint.color = getColor(context, R.attr.colorAccent) ?: Color.RED
+        strokeHitPaint.color = getColor(context, R.attr.colorDiceHit) ?: Color.RED
         strokeHitPaint.isAntiAlias = true
 
-        strokeDisabledPaint.color = Color.GRAY
+        strokeDisabledPaint.color = getColor(context, R.attr.colorDiceDisabled) ?: Color.GRAY
         strokeDisabledPaint.isAntiAlias = true
 
-        backgroundPaint.color = Color.WHITE
+        backgroundPaint.color = getColor(context, R.attr.colorDiceBackground) ?: Color.WHITE
         backgroundPaint.isAntiAlias = true
 
         addOnLayoutChangeListener { _: View, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int ->

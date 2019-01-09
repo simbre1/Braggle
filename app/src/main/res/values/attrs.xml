@@ -9,4 +9,18 @@
         <attr name="metaButtonBarButtonStyle" format="reference"/>
     </declare-styleable>
 
+
+    <attr name="primaryTextColor" format="reference"/>
+    <attr name="buttonNormalColor" format="reference"/>
+    <attr name="buttonHighlightColor" format="reference" />
+    <attr name="buttonTextColor" format="reference" />
+    <attr name="primaryButtonTheme" format="reference" />
+
+    <attr name="colorTextNotFound" format="reference" />
+    <attr name="colorTextFound" format="reference" />
+    <attr name="colorDiceBackground" format="reference" />
+    <attr name="colorDice" format="reference" />
+    <attr name="colorDiceHit" format="reference" />
+    <attr name="colorDiceDisabled" format="reference" />
+
 </resources>

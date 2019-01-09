@@ -12,7 +12,6 @@ import android.view.MenuItem
 import android.widget.EditText
 import androidx.annotation.RawRes
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.github.simbre1.braggle.data.DictionaryRepo
@@ -27,7 +26,7 @@ import kotlin.random.Random
 const val ALL_WORDS = "com.github.simbre1.braggle.ALL_WORDS"
 const val DICTIONARY_LOOKUP_INTENT_PACKAGE = "com.github.simbre1.braggle.DICTIONARY_LOOKUP_INTENT_PACKAGE"
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private val mediaPlayer = MediaPlayer().apply {
         setOnPreparedListener { start() }

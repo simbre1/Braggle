@@ -24,6 +24,14 @@
             app:defaultValue="4"
             app:summary="%s"/>
 
+    <ListPreference
+            app:key="current_theme_preference"
+            app:title="Theme"
+            app:entries="@array/themes"
+            app:entryValues="@array/themeCodes"
+            app:defaultValue="light"
+            app:summary="%s"/>
+
     <SwitchPreference
             app:key="sound_effects"
             app:title="Cowbell"
