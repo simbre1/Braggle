@@ -25,6 +25,7 @@ import kotlin.random.Random
 
 const val ALL_WORDS = "com.github.simbre1.braggle.ALL_WORDS"
 const val DICTIONARY_LOOKUP_INTENT_PACKAGE = "com.github.simbre1.braggle.DICTIONARY_LOOKUP_INTENT_PACKAGE"
+const val DICTIONARY_LOOKUP_URL = "com.github.simbre1.braggle.DICTIONARY_LOOKUP_URL"
 
 class MainActivity : BaseActivity() {
 
@@ -141,6 +142,7 @@ class MainActivity : BaseActivity() {
             val intent = Intent(this@MainActivity, AllWordsActivity::class.java).apply {
                 putExtra(ALL_WORDS, list.toTypedArray())
                 putExtra(DICTIONARY_LOOKUP_INTENT_PACKAGE, language.dictionaryIntentPackage)
+                putExtra(DICTIONARY_LOOKUP_URL, language.dictionaryUrl)
             }
             startActivity(intent)
         }

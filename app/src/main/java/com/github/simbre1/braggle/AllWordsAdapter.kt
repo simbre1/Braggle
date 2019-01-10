@@ -3,6 +3,7 @@ package com.github.simbre1.braggle
 import android.app.SearchManager
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 
 class AllWordsAdapter(private val myDataset: List<Pair<String, Boolean>>,
-                      private val dictionaryLookupIntentPackage: String?) :
+                      private val dictionaryLookupIntentPackage: String?,
+                      private val dictionaryUrl: String?) :
         RecyclerView.Adapter<AllWordsAdapter.MyViewHolder>() {
 
     // Provide a reference to the views for each data item
@@ -46,13 +48,27 @@ class AllWordsAdapter(private val myDataset: List<Pair<String, Boolean>>,
             holder.textView.setTextColor(BoardView.getColor(holder.view.context, R.attr.colorTextNotFound) ?: Color.RED)
         }
 
+        var intent: Intent? = null
         if (dictionaryLookupIntentPackage != null) {
-            holder.textView.setOnClickListener{
-                val intent = Intent(Intent.ACTION_SEARCH)
-                intent.setPackage(dictionaryLookupIntentPackage)
-                intent.putExtra(SearchManager.QUERY, word)
+            val packageIntent = Intent(Intent.ACTION_SEARCH)
+            packageIntent.setPackage(dictionaryLookupIntentPackage)
+            packageIntent.putExtra(SearchManager.QUERY, word)
+            if (packageIntent.resolveActivity(holder.view.context.packageManager) != null) {
+                intent = packageIntent
+            }
+        }
+        if(intent == null && dictionaryUrl != null){
+            val webpage: Uri = Uri.parse(dictionaryUrl.replace("%s", word.toLowerCase()))
+            val urlIntent = Intent(Intent.ACTION_VIEW, webpage)
+            if (urlIntent.resolveActivity(holder.view.context.packageManager) != null) {
+                intent = urlIntent
+            }
+        }
+
+        intent?.run {
+            holder.textView.setOnClickListener {
                 try {
-                    holder.view.context.startActivity(intent)
+                    holder.view.context.startActivity(this)
                 } catch (ignored: Exception) {
                 }
             }
