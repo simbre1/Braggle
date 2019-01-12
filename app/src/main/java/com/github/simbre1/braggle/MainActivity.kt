@@ -167,6 +167,8 @@ class MainActivity : BaseActivity() {
             foundN,
             allN,
             game.language.displayName,
+            game.getScore(),
+            game.getMaxScore(),
             words)
     }
 

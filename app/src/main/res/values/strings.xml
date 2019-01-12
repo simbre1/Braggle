@@ -14,7 +14,7 @@
     <string name="action_show_all_words">End game</string>
     <string name="element_text">%s</string>
     <string name="found_words">
-        <strong>Found %d/%d %s words:</strong>
+        <strong>Found %d/%d %s words, score %d/%d:</strong>
         %s
     </string>
     <string name="loading_new_game">

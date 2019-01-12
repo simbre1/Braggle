@@ -23,6 +23,10 @@ class Game(val uid: Int?,
 
     fun getStopTime() = stopTime
 
+    fun getScore() = getScore(foundWords)
+
+    fun getMaxScore() = getScore(allWords)
+
     fun toGameData(): GameData {
         return GameData(
             uid,
@@ -50,6 +54,19 @@ class Game(val uid: Int?,
                 gameData.foundWords,
                 gameData.startTime,
                 gameData.stopTime)
+        }
+
+        fun getScore(words: Collection<String>) : Int {
+            return words.map {
+                when (it.length) {
+                    0, 1, 2 -> 0
+                    3, 4 -> 1
+                    5 -> 2
+                    6 -> 3
+                    7 -> 5
+                    else -> 11
+                }
+            }.sum()
         }
     }
 }
