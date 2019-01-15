@@ -4,7 +4,10 @@
         android:viewportWidth="164.10063"
         android:viewportHeight="164.10063">
     <group android:translateX="31.564823"
-            android:translateY="30.358618">
+           android:translateY="30.358618"
+           android:name="head"
+           android:pivotX="54"
+           android:pivotY="54">
       <path
           android:pathData="m56.228,21.916c-0.704,-5.841 3.118,-11.973 4.511,-17.501 0.954,-4.994 6.779,-3.696 6.448,1.206 0.505,5.761 0.985,12.424 1.201,18.205v0"
           android:strokeAlpha="1"

@@ -6,10 +6,13 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
+import androidx.vectordrawable.graphics.drawable.Animatable2Compat
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.github.simbre1.braggle.domain.Board
 import kotlin.math.floor
 import kotlin.math.min
@@ -30,6 +33,9 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
     private val strokeDisabledPaint = Paint()
     private val backgroundPaint = Paint()
 
+    private val cowView: AnimatedVectorDrawableCompat?
+    private var cowVisible = false
+
     init {
 
         strokePaint.color = getColor(context, R.attr.colorDice) ?: Color.BLACK
@@ -44,8 +50,31 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
         backgroundPaint.color = getColor(context, R.attr.colorDiceBackground) ?: Color.WHITE
         backgroundPaint.isAntiAlias = true
 
+        cowView = context?.run {
+            AnimatedVectorDrawableCompat.create(
+                this,
+                R.drawable.animated_cow)
+        }?.apply {
+            registerAnimationCallback(object: Animatable2Compat.AnimationCallback() {
+                override fun onAnimationEnd(drawable: Drawable?) {
+                    setCowVisibility(false)
+                }
+            })
+        }
+
         addOnLayoutChangeListener { _: View, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int ->
             updateLayout()
+        }
+
+        wordListeners.add {
+            val cow = context
+                ?.resources
+                ?.getStringArray(R.array.happyCow)
+                ?.contains(it.toLowerCase())
+                ?: false
+            if (cow) {
+                showAnimatedCow()
+            }
         }
     }
 
@@ -58,6 +87,16 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
     fun setActive(active: Boolean) {
         this.active = active
         invalidate()
+    }
+
+    private fun setCowVisibility(visible: Boolean) {
+        cowVisible = visible
+        invalidate()
+    }
+
+    private fun showAnimatedCow() {
+        setCowVisibility(true)
+        cowView?.start()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -84,8 +123,10 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 if (!hits.isEmpty()) {
-                    val word = hits.map { i -> currentBoard.at(i.first, i.second) }
-                        .joinToString("")
+                    val word = hits
+                        .joinToString("") {
+                            i -> currentBoard.at(i.first, i.second)
+                        }
                         .toUpperCase()
                     wordListeners.forEach { l -> l.invoke(word) }
                     hits.clear()
@@ -99,7 +140,7 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        canvas?.run {
+        canvas?.apply {
             hittables.forEach {
                 val hit = hits.contains(it.getIndex())
                 it.draw(
@@ -108,6 +149,17 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
                     else if(hit) strokeHitPaint
                     else strokePaint,
                     backgroundPaint)
+            }
+
+            cowView?.also {
+                if (cowVisible) {
+                    it.setBounds(
+                        (width - it.intrinsicWidth) / 2,
+                        (height - it.intrinsicHeight) / 2,
+                        (width + it.intrinsicWidth) / 2,
+                        (height + it.intrinsicHeight) / 2)
+                    it.draw(this)
+                }
             }
         }
     }
