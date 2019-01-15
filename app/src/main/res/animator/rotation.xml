@@ -2,7 +2,7 @@
 <set>
     <objectAnimator
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:duration="1000"
+            android:duration="500"
             android:propertyName="rotation"
             android:valueFrom="0"
             android:valueTo="360"/>
@@ -18,16 +18,54 @@
             android:propertyName="scaleY"
             android:valueFrom="0"
             android:valueTo="1"/>
+
     <objectAnimator
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:startOffset="500"
+            android:startOffset="700"
+            android:duration="200"
+            android:propertyName="scaleX"
+            android:valueFrom="1"
+            android:valueTo="1.1"/>
+    <objectAnimator
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:startOffset="700"
+            android:duration="200"
+            android:propertyName="scaleY"
+            android:valueFrom="1"
+            android:valueTo="1.1"/>
+
+    <objectAnimator
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:startOffset="900"
+            android:duration="200"
+            android:propertyName="scaleX"
+            android:valueFrom="1.1"
+            android:valueTo="1"/>
+    <objectAnimator
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:startOffset="900"
+            android:duration="200"
+            android:propertyName="scaleY"
+            android:valueFrom="1.1"
+            android:valueTo="1"/>
+
+    <objectAnimator
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:startOffset="1100"
+            android:duration="500"
+            android:propertyName="rotation"
+            android:valueFrom="0"
+            android:valueTo="360"/>
+    <objectAnimator
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:startOffset="1100"
             android:duration="500"
             android:propertyName="scaleX"
             android:valueFrom="1"
             android:valueTo="0"/>
     <objectAnimator
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:startOffset="500"
+            android:startOffset="1100"
             android:duration="500"
             android:propertyName="scaleY"
             android:valueFrom="1"
