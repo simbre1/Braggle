@@ -131,6 +131,7 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
                     wordListeners.forEach { l -> l.invoke(word) }
                     hits.clear()
                 }
+                invalidate()
             }
         }
 
