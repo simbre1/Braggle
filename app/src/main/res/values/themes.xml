@@ -15,6 +15,8 @@
         <item name="colorDice">@color/colorPrimary</item>
         <item name="colorDiceHit">@color/colorAccent</item>
         <item name="colorDiceDisabled">?android:textColorSecondary</item>
+        <item name="colorDiceCorrectWord">@color/colorCorrectWord</item>
+        <item name="colorDiceWrongWord">@color/colorWrongWord</item>
 
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -32,6 +34,8 @@
         <item name="colorDiceHit">?android:colorAccent</item>
         <item name="colorDiceDisabled">@color/dark_colorDiceDisabled</item>
         <!--<item name="colorDiceDisabled">?android:textColorSecondary</item>-->
+        <item name="colorDiceCorrectWord">@color/colorCorrectWord</item>
+        <item name="colorDiceWrongWord">@color/colorWrongWord</item>
 
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

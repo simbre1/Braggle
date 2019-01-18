@@ -2,7 +2,6 @@ package com.github.simbre1.braggle
 
 import android.app.SearchManager
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -43,9 +42,9 @@ class AllWordsAdapter(private val myDataset: List<Pair<String, Boolean>>,
         val word = myDataset[position].first
         holder.textView.text = word
         if (myDataset[position].second) {
-            holder.textView.setTextColor(BoardView.getColor(holder.view.context, R.attr.colorTextFound) ?: Color.CYAN)
+            holder.textView.setTextColor(holder.view.context.getColorFromAttr(R.attr.colorTextFound))
         } else {
-            holder.textView.setTextColor(BoardView.getColor(holder.view.context, R.attr.colorTextNotFound) ?: Color.RED)
+            holder.textView.setTextColor(holder.view.context.getColorFromAttr(R.attr.colorTextNotFound))
         }
 
         var intent: Intent? = null

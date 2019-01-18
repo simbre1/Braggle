@@ -22,5 +22,7 @@
     <attr name="colorDice" format="reference" />
     <attr name="colorDiceHit" format="reference" />
     <attr name="colorDiceDisabled" format="reference" />
+    <attr name="colorDiceCorrectWord" format="reference" />
+    <attr name="colorDiceWrongWord" format="reference" />
 
 </resources>

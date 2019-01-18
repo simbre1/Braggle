@@ -148,13 +148,31 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun onWord(game: Game, word: String) {
+    private fun onWord(game: Game, tiles: List<Tile>) {
+        val word = tiles.joinToString("") { it.str }
+
+        val cow = resources
+            ?.getStringArray(R.array.happyCow)
+            ?.contains(word.toLowerCase())
+            ?: false
+
+        if (cow) {
+            boardView.showAnimatedCow()
+        }
+
         if (game.isWord(word)) {
             if (game.addWord(word)) {
                 vibrate(200)
                 playCowbell()
+                boardView.highlightTiles(
+                    tiles,
+                    boardView.context.getColorFromAttr(R.attr.colorDiceCorrectWord))
             }
             updateFoundString(game)
+        } else {
+            boardView.highlightTiles(
+                tiles,
+                boardView.context.getColorFromAttr(R.attr.colorDiceWrongWord))
         }
     }
 
