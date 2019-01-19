@@ -149,7 +149,9 @@ class MainActivity : BaseActivity() {
     }
 
     private fun onWord(game: Game, tiles: List<Tile>) {
-        val word = tiles.joinToString("") { it.str }
+        val word = tiles
+            .joinToString("") { it.str }
+            .toUpperCase()
 
         val cow = resources
             ?.getStringArray(R.array.happyCow)
