@@ -37,11 +37,11 @@
     </string-array>
 
     <string-array name="happyCow">
-        <item>koe</item>
-        <item>koeien</item>
-        <item>cow</item>
-        <item>cows</item>
-        <item>vache</item>
-        <item>vaches</item>
+        <item>KOE</item>
+        <item>KOEIEN</item>
+        <item>COW</item>
+        <item>COWS</item>
+        <item>VACHE</item>
+        <item>VACHES</item>
     </string-array>
 </resources>

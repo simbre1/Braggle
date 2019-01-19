@@ -155,7 +155,7 @@ class MainActivity : BaseActivity() {
 
         val cow = resources
             ?.getStringArray(R.array.happyCow)
-            ?.contains(word.toLowerCase())
+            ?.contains(word)
             ?: false
 
         if (cow) {
