@@ -93,7 +93,7 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
 
     fun highlightTiles(tiles: List<Tile>,
                        color: Int,
-                       durationMs: Long = 1500) {
+                       durationMs: Long = 1000) {
         tiles.mapNotNull { tile ->
             hittables[tile]?.let {
                 ColorShiftingHittable(
@@ -277,8 +277,9 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
 
 fun Context.getColorFromAttr(
     @AttrRes attrColor: Int,
-    typedValue: TypedValue = TypedValue(),
-    resolveRefs: Boolean = true) : Int {
-    theme.resolveAttribute(attrColor, typedValue, resolveRefs)
-    return typedValue.data
+    typedValue: TypedValue = TypedValue()) : Int {
+    val a = obtainStyledAttributes(typedValue.data, intArrayOf(attrColor))
+    val color = a?.getColor(0, 0)
+    a?.recycle()
+    return color ?: Color.RED
 }
