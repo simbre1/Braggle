@@ -13,7 +13,7 @@ android {
         applicationId "com.github.simbre1.braggle"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 9
+        versionCode 10
         versionName "0.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         kapt {
@@ -50,9 +50,7 @@ dependencies {
 
     implementation "android.arch.persistence.room:runtime:1.1.1"
     kapt "android.arch.persistence.room:compiler:1.1.1"
-}
 
-dependencies {
     def room_version = "2.1.0-alpha03"
 
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
