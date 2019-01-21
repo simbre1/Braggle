@@ -13,9 +13,14 @@ android {
         applicationId "com.github.simbre1.braggle"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 8
-        versionName "0.6"
+        versionCode 9
+        versionName "0.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas".toString())
+            }
+        }
     }
     buildTypes {
         release {
