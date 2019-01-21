@@ -43,7 +43,9 @@ class AnimationScheduler(private val fps: Int,
     fun start() {
         running = true
         timer.scheduleAtFixedRate(0L, (1000/fps).toLong()) {
-            view.invalidate()
+            view.post{
+                view.invalidate()
+            }
         }
     }
 }
