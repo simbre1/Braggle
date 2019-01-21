@@ -169,6 +169,10 @@ class MainActivity : BaseActivity() {
                 boardView.highlightTiles(
                     tiles,
                     boardView.context.getColorFromAttr(R.attr.colorDiceCorrectWord))
+            } else {
+                boardView.highlightTiles(
+                    tiles,
+                    boardView.context.getColorFromAttr(R.attr.colorDiceRepeatedWord))
             }
             updateFoundString(game)
         } else {

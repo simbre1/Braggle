@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorCorrectWord">#59FF3C</color>
     <color name="colorWrongWord">#FF0000</color>
+    <color name="colorRepeatedWord">#FFE924</color>
 
     <color name="dark_colorDiceDisabled">#9e9e9e</color>
 

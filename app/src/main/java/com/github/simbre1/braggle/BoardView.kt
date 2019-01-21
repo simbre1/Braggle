@@ -146,16 +146,23 @@ class BoardView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
 
         canvas?.apply {
             hittables.forEach {
-                val hit = hits.contains(it.value)
                 it.value.draw(
                     this,
                     if(!active) strokeDisabledPaint
-                    else if(hit) strokeHitPaint
                     else strokePaint,
                     backgroundPaint)
             }
 
             animationScheduler.draw(this)
+
+            if (active) {
+                hits.forEach {
+                    it.draw(
+                        this,
+                        strokeHitPaint,
+                        backgroundPaint)
+                }
+            }
 
             cowView?.also {
                 if (cowVisible) {

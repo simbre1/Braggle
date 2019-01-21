@@ -24,5 +24,6 @@
     <attr name="colorDiceDisabled" format="reference" />
     <attr name="colorDiceCorrectWord" format="reference" />
     <attr name="colorDiceWrongWord" format="reference" />
+    <attr name="colorDiceRepeatedWord" format="reference" />
 
 </resources>
