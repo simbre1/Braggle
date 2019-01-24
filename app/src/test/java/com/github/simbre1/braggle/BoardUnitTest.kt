@@ -1,16 +1,13 @@
 package com.github.simbre1.braggle
 
-import com.github.simbre1.braggle.domain.Board
-import com.github.simbre1.braggle.domain.Dictionary
-import com.github.simbre1.braggle.domain.Language
-import com.github.simbre1.braggle.domain.WordFinder
+import com.github.simbre1.braggle.domain.*
 import org.junit.Test
 
 class BoardUnitTest {
     @Test
     fun testSeed() {
         assert(
-            Board.random(Language.EN, 4, "test")
+            Board.create(Language.EN, 4, Seed.create("test"))
                 .getLetters()
                     == "A,J,H,T;U,L,D,A;P,E,N,U;S,I,T,T")
     }
@@ -26,7 +23,7 @@ class BoardUnitTest {
 
         while(!cow) {
             i += 1
-            val board = Board.random(Language.EN, 4, i.toString())
+            val board = Board.create(Language.EN, 4, Seed.create(i.toString()))
             cow = !WordFinder(board, dict).find().isEmpty()
         }
         assert(i == 11)

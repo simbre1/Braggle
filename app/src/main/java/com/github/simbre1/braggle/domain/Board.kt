@@ -2,8 +2,7 @@ package com.github.simbre1.braggle.domain
 
 import java.util.*
 
-class Board(val seed: Long,
-            val seedString: String?,
+class Board(val seed: Seed,
             private var letters: Array<Array<String>>) {
 
     fun at(row: Int, col: Int) = letters[row][col]
@@ -16,12 +15,10 @@ class Board(val seed: Long,
 
     companion object Factory {
 
-        fun create(seed: Long,
-                   seedString: String?,
+        fun create(seed: Seed,
                    joinedLetters: String): Board {
             return Board(
                 seed,
-                seedString,
                 joinedLetters.split(";")
                     .map {
                         it.split(",")
@@ -29,20 +26,10 @@ class Board(val seed: Long,
                     }.toTypedArray())
         }
 
-        fun random(langauge: Language,
-                   size: Int)
-                = random(langauge, size, Random().nextLong(), null)
-
-        fun random(language: Language,
+        fun create(language: Language,
                    size: Int,
-                   seed: String?)
-                = random(language, size, stringToSeed(seed), seed)
-
-        fun random(language: Language,
-                   size: Int,
-                   seed: Long,
-                   seedString: String?): Board {
-            val rand = Random(seed)
+                   seed: Seed): Board {
+            val rand = Random(seed.seed)
             val dice = mutableListOf<Array<String>>()
             dice.addAll(getDice(language, size))
             if (dice.isEmpty()) {
@@ -57,16 +44,7 @@ class Board(val seed: Long,
                 }
             }
 
-            return Board(seed, seedString, letters)
-        }
-
-        private fun stringToSeed(s: String?): Long {
-            val trimmed = s?.trim() ?: ""
-            return if (trimmed.isEmpty()) {
-                kotlin.random.Random.nextLong()
-            } else {
-                trimmed.hashCode().toLong()
-            }
+            return Board(seed, letters)
         }
 
         private fun getDice(language: Language, boardSize: Int): Array<Array<String>> =

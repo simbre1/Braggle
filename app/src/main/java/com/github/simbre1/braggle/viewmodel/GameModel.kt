@@ -6,10 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.github.simbre1.braggle.data.AppDatabase
 import com.github.simbre1.braggle.data.DictionaryRepo
-import com.github.simbre1.braggle.domain.Board
-import com.github.simbre1.braggle.domain.Game
-import com.github.simbre1.braggle.domain.Language
-import com.github.simbre1.braggle.domain.WordFinder
+import com.github.simbre1.braggle.domain.*
 import org.jetbrains.anko.doAsync
 import java.util.*
 
@@ -20,7 +17,7 @@ class GameModel(private val dictionaryRepo: DictionaryRepo) : ViewModel() {
     fun createNewGameAsync(dictionary: String,
                            minWordLength: Int,
                            boardSize: Int,
-                           seed: String?) {
+                           seed: Seed) {
         doAsync {
             createNewGame(dictionary, minWordLength, boardSize, seed)
         }
@@ -29,13 +26,13 @@ class GameModel(private val dictionaryRepo: DictionaryRepo) : ViewModel() {
     fun createNewGame(dictionary: String,
                       minWordLength: Int,
                       boardSize: Int,
-                      seed: String?) {
+                      seed: Seed) {
         val startTime = System.nanoTime()
 
         val language = Language.fromCode(dictionary)
             ?: Language.EN
 
-        val board = Board.random(language, boardSize, seed)
+        val board = Board.create(language, boardSize, seed)
         val dict = dictionaryRepo.get(language)
         val newGame = Game(
             null,

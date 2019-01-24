@@ -1,7 +1,10 @@
 package com.github.simbre1.braggle
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
@@ -9,23 +12,31 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.annotation.RawRes
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.github.simbre1.braggle.data.DictionaryRepo
 import com.github.simbre1.braggle.domain.Game
+import com.github.simbre1.braggle.domain.Seed
 import com.github.simbre1.braggle.viewmodel.GameModel
 import com.github.simbre1.braggle.viewmodel.GameModelFactory
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.qrcode.QRCodeWriter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import org.jetbrains.anko.defaultSharedPreferences
+import org.jetbrains.anko.doAsync
 import kotlin.random.Random
 
 const val ALL_WORDS = "com.github.simbre1.braggle.ALL_WORDS"
 const val DICTIONARY_LOOKUP_INTENT_PACKAGE = "com.github.simbre1.braggle.DICTIONARY_LOOKUP_INTENT_PACKAGE"
 const val DICTIONARY_LOOKUP_URL = "com.github.simbre1.braggle.DICTIONARY_LOOKUP_URL"
+const val RC_QR_SCANNER = 1
 
 class MainActivity : BaseActivity() {
 
@@ -33,6 +44,8 @@ class MainActivity : BaseActivity() {
         setOnPreparedListener { start() }
         setOnCompletionListener { reset() }
     }
+
+    private var alertDialog: AlertDialog? = null
 
     lateinit var gameModel: GameModel
 
@@ -54,7 +67,7 @@ class MainActivity : BaseActivity() {
         gameModel.game.observe(this, Observer { game ->
             supportActionBar?.title = getString(
                 R.string.title_activity_main_seed,
-                game.board.seedString ?: "")
+                game.board.seed.seedString ?: "")
             boardView.setBoard(game.board)
             updateFoundString(game)
             boardView.setActive(game.isRunning())
@@ -66,6 +79,7 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onStop() {
+        alertDialog?.dismiss()
         gameModel.save(this)
         super.onStop()
     }
@@ -78,14 +92,56 @@ class MainActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
         R.id.action_new_game -> {
             val builder = AlertDialog.Builder(this)
-            val seed = EditText(this)
+
+            val view = View.inflate(this, R.layout.new_game, null)
+            val seedView = view.findViewById<EditText>(R.id.seedText)
+            val qrButton = view.findViewById<ImageButton>(R.id.qrButton)
+            val qrView = view.findViewById<ImageView>(R.id.qrView)
+
+            qrButton.setOnClickListener {
+                val intent = Intent("com.google.zxing.client.android.SCAN")
+                intent.putExtra("SCAN_MODE", "QR_CODE_MODE")
+                startActivityForResult(intent, RC_QR_SCANNER)
+            }
+
+            gameModel.game.value?.also {
+                qrView.addOnLayoutChangeListener { view: View, i: Int, i1: Int, i2: Int, i3: Int, i4: Int, i5: Int, i6: Int, i7: Int ->
+                    doAsync {
+                        val encode = QRCodeWriter().encode(
+                            it.board.seed.toQr(),
+                            BarcodeFormat.QR_CODE,
+                            qrView.width,
+                            qrView.width
+                        )
+
+                        val bitMatrixWidth = encode.getWidth()
+                        val bitMatrixHeight = encode.getHeight()
+
+                        val pixels = IntArray(bitMatrixWidth * bitMatrixHeight)
+
+                        for (y in 0 until bitMatrixHeight) {
+                            val offset = y * bitMatrixWidth
+                            for (x in 0 until bitMatrixWidth) {
+                                pixels[offset + x] = if (encode.get(x, y)) Color.BLACK else Color.WHITE
+                            }
+                        }
+                        val bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444)
+                        bitmap.setPixels(pixels, 0, qrView.width, 0, 0, bitMatrixWidth, bitMatrixHeight)
+                        qrView.post {
+                            qrView.setImageBitmap(bitmap)
+                        }
+                    }
+                }
+            }
+
             builder.apply {
-                setPositiveButton(R.string.ok) { _, _ -> createNewGame(seed.text.toString()) }
+                setPositiveButton(R.string.ok) { _, _ -> createNewGame(Seed.create(seedView.text.toString())) }
                 setNegativeButton(R.string.cancel) { _, _ -> }
             }
             builder.setTitle(R.string.confirm_new_game)
-            builder.setView(seed)
-            builder.create().show()
+            builder.setView(view)
+            alertDialog = builder.create()
+            alertDialog?.show()
 
             true
         }
@@ -115,12 +171,25 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun loadLastGame() {
-        wordView.text = getString(R.string.loading_new_game)
-        gameModel.loadLastGameAsync(this) { createNewGame(null) }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_QR_SCANNER) {
+            if (resultCode == Activity.RESULT_OK) {
+                data?.getStringExtra("SCAN_RESULT")?.also {
+                    Seed.fromQr(it)?.also {
+                        createNewGame(it)
+                    }
+                }
+            }
+        }
     }
 
-    private fun createNewGame(seed: String?) {
+    private fun loadLastGame() {
+        wordView.text = getString(R.string.loading_new_game)
+        gameModel.loadLastGameAsync(this) { createNewGame(Seed.create()) }
+    }
+
+    private fun createNewGame(seed: Seed) {
         wordView.text = getString(R.string.loading_new_game)
 
         val language = defaultSharedPreferences.getString("language_preference", "en")

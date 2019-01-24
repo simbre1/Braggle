@@ -1,9 +1,6 @@
 package com.github.simbre1.braggle
 
-import com.github.simbre1.braggle.domain.Board
-import com.github.simbre1.braggle.domain.Dictionary
-import com.github.simbre1.braggle.domain.Language
-import com.github.simbre1.braggle.domain.WordFinder
+import com.github.simbre1.braggle.domain.*
 import org.junit.Test
 
 class WordFinderUnitTest {
@@ -16,7 +13,7 @@ class WordFinderUnitTest {
                 arrayOf("A",  "T", "P", "E")
         )
 
-        val board = Board(0L, null, letters)
+        val board = Board(Seed.create(0L), letters)
         val dict = Dictionary(
             sortedSetOf("BLIEP", "BLOEP", "BLAAP", "QUEST"),
             Language.EN
