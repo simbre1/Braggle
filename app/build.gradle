@@ -51,7 +51,7 @@ dependencies {
     implementation "android.arch.persistence.room:runtime:1.1.1"
     kapt "android.arch.persistence.room:compiler:1.1.1"
 
-    def room_version = "2.1.0-alpha03"
+    def room_version = "2.1.0-alpha04"
 
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
     implementation "androidx.room:room-runtime:$room_version"
