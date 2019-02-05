@@ -69,6 +69,7 @@ class GameModel(private val dictionaryRepo: DictionaryRepo) : ViewModel() {
                     AppDatabase.getInstance(context)
                         .gameDataDao()
                         .insertAll(toGameData())
+                    loadLastGameAsync(context) {}
                 } else {
                     AppDatabase.getInstance(context)
                         .gameDataDao()

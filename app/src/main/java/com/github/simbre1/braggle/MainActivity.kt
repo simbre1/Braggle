@@ -238,6 +238,7 @@ class MainActivity : BaseActivity() {
                 boardView.highlightTiles(
                     tiles,
                     boardView.context.getColorFromAttr(R.attr.colorDiceCorrectWord))
+                gameModel.save(this)
             } else {
                 boardView.highlightTiles(
                     tiles,
