@@ -3,6 +3,9 @@ package com.github.simbre1.braggle
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.github.simbre1.braggle.MainActivity.Companion.ALL_WORDS
+import com.github.simbre1.braggle.MainActivity.Companion.DICTIONARY_LOOKUP_INTENT_PACKAGE
+import com.github.simbre1.braggle.MainActivity.Companion.DICTIONARY_LOOKUP_URL
 
 class AllWordsActivity : BaseActivity() {
 

@@ -19,5 +19,41 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_main" android:id="@+id/include"/>
+    <LinearLayout android:id="@+id/screen_sign_in" style="@style/LLScreen">
+        <TextView style="@style/GameTitle" />
+        <TextView style="@style/GameBlurb" />
+
+        <Button android:id="@+id/button_single_player"
+            style="@style/MainScreenButton"
+            android:text="@string/single_player" />
+        <com.google.android.gms.common.SignInButton android:id="@+id/button_sign_in"
+            style="@style/SignInButton" />
+
+        <Button android:id="@+id/button_sign_out"
+            style="@style/SignOutButton"
+            android:text="@string/sign_out" />
+
+        <Button android:id="@+id/button_invite_players"
+            style="@style/SignOutButton"
+            android:text="@string/invite_players" />
+
+        <Button android:id="@+id/button_see_invitations"
+            style="@style/SignOutButton"
+            android:text="@string/see_invitations" />
+    </LinearLayout>
+
+    <!-- INVITATION POPUP -->
+    <LinearLayout android:id="@+id/invitation_popup" style="@style/InvPopup">
+        <TextView android:id="@+id/incoming_invitation_text" style="@style/InvPopupText" />
+        <Button android:id="@+id/button_accept_popup_invitation"
+            style="@style/InvPopupButton"
+            android:text="@string/accept_popup_invite" />
+    </LinearLayout>
+
+    <!-- "PLEASE WAIT" SCREEN -->
+    <LinearLayout android:id="@+id/screen_wait" style="@style/LLScreen">
+        <TextView style="@style/Blurb" android:text="@string/please_wait" />
+    </LinearLayout>
+
+    <include layout="@layout/content_main" android:id="@+id/game_view"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
