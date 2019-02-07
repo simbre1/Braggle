@@ -108,7 +108,7 @@ class MainActivity : BaseActivity() {
                 qrView.addOnLayoutChangeListener { view: View, i: Int, i1: Int, i2: Int, i3: Int, i4: Int, i5: Int, i6: Int, i7: Int ->
                     doAsync {
                         val encode = QRCodeWriter().encode(
-                            it.board.seed.toQr(),
+                            it.toQr(),
                             BarcodeFormat.QR_CODE,
                             qrView.width,
                             qrView.width
@@ -176,8 +176,11 @@ class MainActivity : BaseActivity() {
         if (requestCode == RC_QR_SCANNER) {
             if (resultCode == Activity.RESULT_OK) {
                 data?.getStringExtra("SCAN_RESULT")?.also {
-                    Seed.fromQr(it)?.also {
-                        createNewGame(it)
+                    val seed = Seed.fromQr(it)
+                    if (seed != null) {
+                        createNewGame(seed)
+                    } else {
+                        gameModel.createNewGameFromQr(it)
                     }
                 }
             }

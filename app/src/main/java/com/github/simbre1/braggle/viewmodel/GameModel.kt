@@ -38,6 +38,7 @@ class GameModel(private val dictionaryRepo: DictionaryRepo) : ViewModel() {
             null,
             board,
             language,
+            minWordLength,
             WordFinder(board, dict).find(minWordLength),
             TreeSet(),
             Date(),
@@ -49,6 +50,14 @@ class GameModel(private val dictionaryRepo: DictionaryRepo) : ViewModel() {
         Log.d("createNewGame", "time:" + (System.nanoTime() - startTime))
 
         game.postValue(newGame)
+    }
+
+    fun createNewGameFromQr(str: String) {
+        doAsync {
+            Game.fromQr(str, dictionaryRepo)?.also {
+                game.postValue(it)
+            }
+        }
     }
 
     fun loadLastGameAsync(context: Context,

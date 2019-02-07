@@ -10,6 +10,7 @@ data class GameData (
     @PrimaryKey var uid: Int?,
     @ColumnInfo(name = "language") var language: String,
     @ColumnInfo(name = "boardSize") var boardSize: Int,
+    @ColumnInfo(name = "minWordLength") var minWordLength: Int,
     @ColumnInfo(name = "seed") var seed: Long,
     @ColumnInfo(name = "seedString") var seedString: String?,
     @ColumnInfo(name = "board") var board: String,

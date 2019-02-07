@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e90b2b41916930c9ef41dee97417f0d1",
+    "identityHash": "349d83160c11e700aedc5f0737088fb7",
     "entities": [
       {
         "tableName": "GameData",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER, `language` TEXT NOT NULL, `boardSize` INTEGER NOT NULL, `seed` INTEGER NOT NULL, `seedString` TEXT, `board` TEXT NOT NULL, `allWords` TEXT NOT NULL, `foundWords` TEXT NOT NULL, `startTime` INTEGER NOT NULL, `stopTime` INTEGER, PRIMARY KEY(`uid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER, `language` TEXT NOT NULL, `boardSize` INTEGER NOT NULL, `minWordLength` INTEGER, `seed` INTEGER NOT NULL, `seedString` TEXT, `board` TEXT NOT NULL, `allWords` TEXT NOT NULL, `foundWords` TEXT NOT NULL, `startTime` INTEGER NOT NULL, `stopTime` INTEGER, PRIMARY KEY(`uid`))",
         "fields": [
           {
             "fieldPath": "uid",
@@ -25,6 +25,12 @@
             "columnName": "boardSize",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "minWordLength",
+            "columnName": "minWordLength",
+            "affinity": "INTEGER",
+            "notNull": false
           },
           {
             "fieldPath": "seed",
@@ -81,7 +87,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"e90b2b41916930c9ef41dee97417f0d1\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"349d83160c11e700aedc5f0737088fb7\")"
     ]
   }
 }
