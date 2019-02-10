@@ -8,7 +8,7 @@ import java.util.*
 
 @Dao
 interface GameDataDao {
-    @Query("select * from gameData")
+    @Query("select * from gameData order by startTime desc")
     fun getAll(): List<GameData>
 
     @Query("select * from gameData order by startTime desc limit 1")
